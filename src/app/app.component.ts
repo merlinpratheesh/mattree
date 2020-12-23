@@ -111,7 +111,8 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
   constructor(
     public afAuth: AngularFireAuth,
     public developmentservice:UserdataService,
-    private db: AngularFirestore
+    private db: AngularFirestore,    
+    public testerApiService: UserdataService
     ) {
       this.myauth = this.getObservableauthState(this.afAuth.authState);
       this.myonline = this.getObservableonine(this.developmentservice.isOnline$);
@@ -125,6 +126,30 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
               //read tc
               this.myuserProfile.userAuthenObj = myauthentication;
               this.myuserProfile.projectLocation= 'projectList/DemoProjectKey';
+              this.testerApiService.docExists(this.myuserProfile.userAuthenObj.uid).then(success=>{
+                if(success === undefined){
+                  const nextMonth: Date = new Date();
+                  nextMonth.setMonth(nextMonth.getMonth() + 1);
+                  const newItem = {
+                    MembershipEnd: nextMonth.toDateString(),
+                    MembershipType: 'Demo',
+                    projectLocation: '/projectList/DemoProjectKey',
+                    projectOwner: true,
+                    projectName: 'Demo'
+                  };
+          
+                  this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem);
+                  this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+                  //write new record
+                  this.myuserProfile.projectOwner = true;
+                  this.myuserProfile.projectName = 'Demo';
+                  this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+                  this.myuserProfile.membershipType = 'Demo';
+                  this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
+                  //other opions here for new User
+                  this.myprojectFlags.showPaymentpage = false;
+                }
+              });
               this.loadFirstPageKeys();
               //read keys
             }

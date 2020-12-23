@@ -3,7 +3,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { of, merge, fromEvent } from 'rxjs';
-import { map} from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { map, first } from 'rxjs/operators';
 
 export interface projectFlags
 {    
@@ -62,7 +63,7 @@ export class UserdataService {
   isOnline$: Observable<boolean>;
 
   constructor(
-    public auth: AngularFireAuth
+    public auth: AngularFireAuth,private db: AngularFirestore
   ) { 
     this.isOnline$ = merge(
       of(null),
@@ -81,5 +82,8 @@ export class UserdataService {
   }
   logout() {
     return this.auth.signOut();
+  }
+  docExists(uid: string) {
+    return this.db.doc(`myProfile/${uid}`).valueChanges().pipe(first()).toPromise();
   }
 }
