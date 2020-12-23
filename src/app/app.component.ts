@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject , Subscription,Observable } from 'rxjs';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { UserdataService, MainSectionGroup,TestcaseInfo,userProfile,projectFlags } from './service/userdata.service';
-import { map, switchMap,filter,take } from 'rxjs/operators';
+import { projectVariables,projectControls, UserdataService, MainSectionGroup,TestcaseInfo,userProfile,projectFlags } from './service/userdata.service';
+import { map, switchMap,filter,take,startWith } from 'rxjs/operators';
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
 import { doc } from 'rxfire/firestore';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
   getSectionsSubscription:Subscription;
   getSectionsBehaviourSub= new BehaviorSubject(undefined);
   Sections;
+  SectionTc;
   getSections = (MainAndSubSectionkeys: AngularFirestoreDocument<MainSectionGroup>) => {
     if(this.getSectionsSubscription !== undefined){
       this.getSectionsSubscription.unsubscribe();
@@ -36,6 +38,7 @@ export class AppComponent implements OnInit {
     });
     return this.getSectionsBehaviourSub;
   };
+  loadFirstPageTcSub:Subscription;
   getTestcasesSubscription:Subscription;
   getTestcasesBehaviourSub= new BehaviorSubject(undefined);
 getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {    
@@ -56,6 +59,8 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
     });
     return this.getTestcasesBehaviourSub;
   };
+
+ 
 
   getObservableauthState = (authdetails: Observable<firebase.User>) => {
 
@@ -108,11 +113,36 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
     SubSectionData: undefined,
     ownPublicproject: []
   };
+  myprojectControls: projectControls = {
+    subsectionkeysControl: new FormControl(null, Validators.required),
+    testcaseInfoControl: new FormControl(),
+    createTestcaseControl: new FormControl(),
+    publicprojectControl: new FormControl(null, Validators.required),
+    ownPublicprojectControl: new FormControl(null, Validators.required),
+    editMainsectionGroup: this.fb.group({
+      editMainsectionControl: ''
+    }),
+    visibilityMainsectionGroup: this.fb.group({
+      editVisibilityControl: [{ value: false, disabled: false }]
+    }),
+    editSubsectionGroup: this.fb.group({
+      editSubsectionControl: ''
+      
+    })
+  };
+  myprojectVariables: projectVariables = {
+    testcaseInfodata: undefined,
+    initialMainSection: undefined,
+    lastSavedVisibility:false,
+    modifiedKeysDb:undefined,
+    editProjectkeysSaved: undefined
+  }
   constructor(
     public afAuth: AngularFireAuth,
     public developmentservice:UserdataService,
     private db: AngularFirestore,    
-    public testerApiService: UserdataService
+    public testerApiService: UserdataService,
+    public fb: FormBuilder
     ) {
       this.myauth = this.getObservableauthState(this.afAuth.authState);
       this.myonline = this.getObservableonine(this.developmentservice.isOnline$);
@@ -152,12 +182,14 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
               });
               this.loadFirstPageKeys();
               //read keys
+              this.loadFirstPageTc();
             }
               return onlineval;      
           }))
         })        
       );
     }
+
     loadFirstPageKeys(){
       console.log('this.loadfirstPageKeysSub', this.loadfirstPageKeysSub);
       if(this.loadfirstPageKeysSub !== undefined){
@@ -206,6 +238,37 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
       })//end map-profileData
       ).subscribe(_=>{
 
+      });
+    }
+    loadFirstPageTc(){
+      let localProjectLocation = '';
+      if(this.loadFirstPageTcSub !== undefined){
+        this.loadFirstPageTcSub.unsubscribe();
+      }
+      this.loadFirstPageTcSub= this.myprojectControls.subsectionkeysControl.valueChanges
+      .pipe(startWith({value: '', groupValue: ''}),
+        map((selection:any)=>{
+          console.log('selection',selection);
+        if(!selection || selection.groupValue === ''){
+          this.myprojectVariables.initialMainSection='SubSection';
+          this.SectionTc=null;
+          this.myprojectFlags.showEditTcButton = false;
+        }else{
+          this.myprojectVariables.initialMainSection=selection.groupValue;
+          this.myprojectFlags.showEditTcButton = false;
+          
+          if (this.myuserProfile.projectName === 'Demo' ) {
+            localProjectLocation = 'projectList/' + this.myuserProfile.userAuthenObj.uid;
+          } else {
+            localProjectLocation = '/' + this.myuserProfile.projectName + '/' + selection.groupValue + '/items/' + selection.value;
+          }  
+          this.SectionTc = this.getTestcases(this.db.doc(localProjectLocation));
+        }
+       
+      })
+        
+      ).subscribe(_=>{
+  
       });
     }
     ngOnInit() {

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { of, merge, fromEvent } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, first } from 'rxjs/operators';
+import { FormControl,FormGroup} from '@angular/forms'
 
 export interface projectFlags
 {    
@@ -53,6 +54,26 @@ export interface MainSectionGroup {
   disabled: boolean;
   name: string;
   section: SubSection[];
+}
+
+export interface projectControls{
+  subsectionkeysControl: FormControl;//1-Keys come from db and user sub-sec selection will load a doc from demo or public proj
+  testcaseInfoControl: FormControl; //Displays the selected Testcase details
+  createTestcaseControl: FormControl;//User enters a test case name
+  publicprojectControl: FormControl;//1-User selects a public project    
+  ownPublicprojectControl: FormControl;//1-User selects own public project
+  editMainsectionGroup: FormGroup;// user selects a Main section key
+  visibilityMainsectionGroup:FormGroup,
+  editSubsectionGroup: FormGroup;  // user selects a Sub section key
+}
+export interface projectVariables
+{
+    initialMainSection?:string;
+    viewSelectedTestcase?:TestcaseInfo;
+    testcaseInfodata?: Observable<TestcaseInfo[]>;
+    modifiedKeysDb?:TestcaseInfo[];
+    editProjectkeysSaved:MainSectionGroup[];
+    lastSavedVisibility:boolean;
 }
 
 @Injectable({
