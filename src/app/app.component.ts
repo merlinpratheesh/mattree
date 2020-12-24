@@ -38,6 +38,9 @@ export class AppComponent implements OnInit {
   mainsubsectionKeys = [];  
   subSectionKeys=[];
   savedisabledval=undefined;
+  publicprojectControlSub:Subscription;
+ownPublicprojectControlSub:Subscription;
+editMainsectionGroupSub:Subscription;
   getPublicList = (publicProjects: AngularFirestoreDocument<any>) => {
     if(this.getPublicListSubscription !== undefined){
       this.getPublicListSubscription.unsubscribe();
@@ -270,7 +273,6 @@ getTestcases = (TestcaseList: AngularFirestoreDocument<TestcaseInfo>) => {
     public afAuth: AngularFireAuth,
     public developmentservice:UserdataService,
     private db: AngularFirestore,    
-    public testerApiService: UserdataService,
     public fb: FormBuilder
     ) {
       this.myauth = this.getObservableauthState(this.afAuth.authState);
@@ -294,7 +296,7 @@ getTestcases = (TestcaseList: AngularFirestoreDocument<TestcaseInfo>) => {
               //load private
               console.log(myauthentication.uid);
               this.privateList= this.getPrivateList(this.db.doc(('/projectList/' + myauthentication.uid)));
-              this.myprojectControls.publicprojectControl.valueChanges.pipe(
+              this.publicprojectControlSub= this.myprojectControls.publicprojectControl.valueChanges.pipe(
                 map((some: string) => {
                   console.log('selected-',some);
                   //check unique
@@ -303,7 +305,7 @@ getTestcases = (TestcaseList: AngularFirestoreDocument<TestcaseInfo>) => {
                 })).subscribe(success=>{
 
                 });
-              this.myprojectControls.ownPublicprojectControl.valueChanges.pipe(
+                this.ownPublicprojectControlSub= this.myprojectControls.ownPublicprojectControl.valueChanges.pipe(
                 map((some: string) => {
                   console.log('selected-',some);
                   //check unique
@@ -311,7 +313,7 @@ getTestcases = (TestcaseList: AngularFirestoreDocument<TestcaseInfo>) => {
                 })).subscribe(success=>{
 
                 });
-              this.myprojectControls.editMainsectionGroup.valueChanges.pipe(
+                this.editMainsectionGroupSub= this.myprojectControls.editMainsectionGroup.valueChanges.pipe(
               map((some: any) => {
                 console.log('selected-',some.editMainsectionControl);
                 this.subSectionKeys=[];
@@ -428,18 +430,20 @@ getTestcases = (TestcaseList: AngularFirestoreDocument<TestcaseInfo>) => {
     ngOnInit() {
     }
     componentLogOff() {
-      this.developmentservice?.logout();
-      this.getProfileInfoBehaviourSub?.complete();
-      this.getProfileInfoSubscription?.unsubscribe();
       this.loadfirstPageKeysSub?.unsubscribe();
       this.loadFirstPageTcSub?.unsubscribe();
-      this.getTestcasesSubscription?.unsubscribe();
-      this.getTestcasesBehaviourSub?.complete();
-      this.getSectionsSubscription?.unsubscribe();
-      this.getSectionsBehaviourSub?.complete();
       this.getPublicListSubscription?.unsubscribe();
       this.getPublicListBehaviourSub?.complete();
+      this.getPrivateSectionsSubscription?.unsubscribe();
+      this.getPrivateSectionsBehaviourSub?.complete();
       this.getPrivateListSubscription?.unsubscribe();
       this.getPrivateListBehaviourSub?.complete();
+      this.getSectionsSubscription?.unsubscribe();
+      this.getSectionsBehaviourSub?.complete();
+      this.getTestcasesSubscription?.unsubscribe();
+      this.getTestcasesBehaviourSub?.complete();
+      this.getProfileInfoSubscription?.unsubscribe();
+      this.getProfileInfoBehaviourSub?.complete();     
+      this.developmentservice.logout();
 }
 }
