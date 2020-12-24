@@ -28,14 +28,96 @@ export class AppComponent implements OnInit {
   getSectionsBehaviourSub= new BehaviorSubject(undefined);
   Sections;
   SectionTc;
+  publicList;
+  getPublicListSubscription:Subscription;
+  getPublicListBehaviourSub= new BehaviorSubject(undefined);
+  privateList;
+  getPrivateListSubscription:Subscription;
+  getPrivateListBehaviourSub= new BehaviorSubject(undefined);
+  keysReadFromDb:MainSectionGroup[];
+  mainsubsectionKeys = [];  
+  subSectionKeys=[];
+  savedisabledval=undefined;
+  getPublicList = (publicProjects: AngularFirestoreDocument<any>) => {
+    if(this.getPublicListSubscription !== undefined){
+      this.getPublicListSubscription.unsubscribe();
+    }
+    this.getPublicListSubscription= publicProjects.valueChanges().subscribe((val: any) => {
+      if(val === undefined){
+        this.getPublicListBehaviourSub.next(undefined);
+      }else{
+        if(!Object.keys(val.public).length === true){
+          this.getPublicListBehaviourSub.next(undefined);
+        }else{ 
+          if(val.public !== undefined){         
+          this.getPublicListBehaviourSub.next(val.public);
+          }
+        }
+      }     
+    });
+    return this.getPublicListBehaviourSub;
+  };
+  getPrivateSectionsSubscription:Subscription;
+  getPrivateSectionsBehaviourSub= new BehaviorSubject(undefined);
+  privateMain;
+  getPrivateSections = (MainAndSubSectionPrivatekeys: AngularFirestoreDocument<MainSectionGroup>) => {
+    if(this.getPrivateSectionsSubscription !== undefined){
+      this.getPrivateSectionsSubscription.unsubscribe();
+    }
+    this.getPrivateSectionsSubscription= MainAndSubSectionPrivatekeys.valueChanges().subscribe((val: any) => {
+      console.log('privatemain', val);
+ 
+        if(val === undefined){
+          this.mainsubsectionKeys=[];
+          this.getPrivateSectionsBehaviourSub.next(undefined);
+        }else{
+          if(!Object.keys(val.MainSection).length === true){
+            this.mainsubsectionKeys=[];
+            this.getPrivateSectionsBehaviourSub.next(undefined);
+          }else{ 
+          if(val.MainSection !== undefined){
+            this.keysReadFromDb= val.MainSection;
+            this.mainsubsectionKeys=[];
+            this.keysReadFromDb?.forEach(eachMainfield=>{
+                this.mainsubsectionKeys.push(eachMainfield.name);          
+              });         
+            }            
+            this.getPrivateSectionsBehaviourSub.next(val.MainSection);
+          }       
+        }     
+    });
+    return this.getPrivateSectionsBehaviourSub;
+  };
+  getPrivateList = (privateProjects: AngularFirestoreDocument<any>) => {
+    if(this.getPrivateListSubscription !== undefined){
+      this.getPrivateListSubscription.unsubscribe();
+    }
+    this.getPrivateListSubscription= privateProjects.valueChanges().subscribe((val: any) => {
+      if(!Object.keys(val).length === true){
+        this.getPrivateListBehaviourSub.next(undefined);
+      }else{     
+        this.getPrivateListBehaviourSub.next(val.ownerRecord);
+      }     
+    });
+    return this.getPrivateListBehaviourSub;
+  };
+
   getSections = (MainAndSubSectionkeys: AngularFirestoreDocument<MainSectionGroup>) => {
     if(this.getSectionsSubscription !== undefined){
       this.getSectionsSubscription.unsubscribe();
     }
     this.getSectionsSubscription= MainAndSubSectionkeys.valueChanges().subscribe((val: any) => {
       console.log('val',val);
-      if(val !== undefined){
-        this.getSectionsBehaviourSub.next(val.MainSection);
+      if(val === undefined){       
+        this.getSectionsBehaviourSub.next(undefined);
+      }else{
+        if(!Object.keys(val.MainSection).length === true){
+          this.getSectionsBehaviourSub.next(undefined);
+        }else{ 
+          if(val.MainSection !== undefined){
+            this.getSectionsBehaviourSub.next(val.MainSection);
+          }
+        }
       }     
     });
     return this.getSectionsBehaviourSub;
@@ -43,19 +125,30 @@ export class AppComponent implements OnInit {
   loadFirstPageTcSub:Subscription;
   getTestcasesSubscription:Subscription;
   getTestcasesBehaviourSub= new BehaviorSubject(undefined);
-getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {    
+getTestcases = (TestcaseList: AngularFirestoreDocument<TestcaseInfo>) => {    
     if(this.getTestcasesSubscription !== undefined){
       this.getTestcasesSubscription.unsubscribe();
     }
-    this.getTestcasesSubscription= TestcasList.valueChanges().subscribe((val: any) => {
-      let arrayeverse=val;
-      if(val !== undefined){
-        console.log('val',val.testcase);    
-        arrayeverse.testcase= val.testcase.reverse();
+    this.getTestcasesSubscription= TestcaseList.valueChanges().subscribe((val: any) => {
+      console.log('val',val);
+      let arrayeverse=val;   
+      if(val === undefined){       
+        arrayeverse= undefined;
       }else{
+        if(!Object.keys(val.testcase).length === true){
+          arrayeverse= undefined;
+        }else{ 
+          if(val.testcase !== undefined){ 
+            console.log('val.testcase',val.testcase);
+          arrayeverse= (val.testcase).reverse();
+          }else{
+            arrayeverse= undefined;
+          }            
+        }
       }
       this.getTestcasesBehaviourSub.next(arrayeverse);
     });
+
     return this.getTestcasesBehaviourSub;
   };
   getProfileInfoSubscription:Subscription;
@@ -66,8 +159,7 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
       this.getProfileInfoSubscription.unsubscribe();
     }
     this.getProfileInfoSubscription= ProfileInfoDoc.valueChanges().subscribe(async (val: myusrinfo) => {
-      
-      if(val === undefined){
+      if(!Object.keys(val).length === true){
         const documentExist=undefined;//= await this.testerApiService.docExists();
         console.log('documentExist',documentExist);
         if(documentExist !== undefined){
@@ -79,8 +171,7 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
             projectLocation: '/projectList/DemoProjectKey',
             projectOwner: true,
             projectName: 'Demo'
-          };
-  
+          };  
           this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem).then(success=>{
             this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
             //write new record
@@ -90,12 +181,9 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
             this.myuserProfile.membershipType = 'Demo';
             this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
             //other opions here for new User
-            this.myprojectFlags.showPaymentpage = false;
-            
-          });
-          
+            this.myprojectFlags.showPaymentpage = false;            
+          });          
         }
-
       }
       this.getProfileInfoBehaviourSub.next(val);
     });
@@ -201,6 +289,51 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
               this.loadFirstPageKeys();
               //read keys
               this.loadFirstPageTc();
+              //load public
+              this.publicList= this.getPublicList(this.db.doc(('/projectList/publicProjects')));
+              //load private
+              console.log(myauthentication.uid);
+              this.privateList= this.getPrivateList(this.db.doc(('/projectList/' + myauthentication.uid)));
+              this.myprojectControls.publicprojectControl.valueChanges.pipe(
+                map((some: string) => {
+                  console.log('selected-',some);
+                  //check unique
+                  this.myuserProfile.projectName=some;
+                  this.Sections= this.getSections(this.db.doc('/publicProjectKeys/' + some));
+                })).subscribe(success=>{
+
+                });
+              this.myprojectControls.ownPublicprojectControl.valueChanges.pipe(
+                map((some: string) => {
+                  console.log('selected-',some);
+                  //check unique
+                  this.privateMain= this.getPrivateSections(this.db.doc('/publicProjectKeys/' + some));
+                })).subscribe(success=>{
+
+                });
+              this.myprojectControls.editMainsectionGroup.valueChanges.pipe(
+              map((some: any) => {
+                console.log('selected-',some.editMainsectionControl);
+                this.subSectionKeys=[];
+                this.keysReadFromDb.forEach(eachMainfield=>
+                  {
+                    if(some.editMainsectionControl !== null){
+                      if(some.editMainsectionControl === eachMainfield.name){
+                        this.savedisabledval=eachMainfield.disabled;
+                        this.myprojectControls.visibilityMainsectionGroup.setValue({editVisibilityControl:  this.savedisabledval});
+                        eachMainfield.section.forEach(eachSubfield=>{
+                          this.subSectionKeys.push(eachSubfield.viewvalue);
+                        });
+                      }
+                    }
+                    
+                  });
+                //check unique
+                
+              })).subscribe(success=>{
+
+              });
+               
             }
               return onlineval;      
           }),
@@ -282,6 +415,7 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
           } else {
             localProjectLocation = '/' + this.myuserProfile.projectName + '/' + selection.groupValue + '/items/' + selection.value;
           }  
+          console.log('localProjectLocation',localProjectLocation);
           this.SectionTc = this.getTestcases(this.db.doc(localProjectLocation));
         }
        
@@ -303,5 +437,9 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
       this.getTestcasesBehaviourSub?.complete();
       this.getSectionsSubscription?.unsubscribe();
       this.getSectionsBehaviourSub?.complete();
+      this.getPublicListSubscription?.unsubscribe();
+      this.getPublicListBehaviourSub?.complete();
+      this.getPrivateListSubscription?.unsubscribe();
+      this.getPrivateListBehaviourSub?.complete();
 }
 }
