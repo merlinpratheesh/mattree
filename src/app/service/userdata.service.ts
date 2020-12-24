@@ -6,6 +6,7 @@ import { of, merge, fromEvent } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map, first } from 'rxjs/operators';
 import { FormControl,FormGroup} from '@angular/forms'
+import { faWindows } from '@fortawesome/free-brands-svg-icons';
 
 export interface projectFlags
 {    
@@ -99,11 +100,13 @@ export class UserdataService {
     ).pipe(map(() => navigator.onLine));
   }
   login() {
-    return this.auth.signInWithPopup( new (firebase.auth as any).GoogleAuthProvider()).catch(function(error) {
+    return this.auth.signInWithRedirect( new (firebase.auth as any).GoogleAuthProvider()).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       if (errorCode === 'auth/popup-closed-by-user' || errorCode === 'auth/network-request-failed'){
-        alert('Check Internet Connection');
+        
+        //alert('Check Internet Connection');
+        location.reload();
       }
     });
   }

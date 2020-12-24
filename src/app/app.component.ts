@@ -294,14 +294,14 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
     ngOnInit() {
     }
     componentLogOff() {
-      this.developmentservice.logout();
-      this.getProfileInfoBehaviourSub.complete();
-      this.getProfileInfoSubscription.unsubscribe();
-      this.loadfirstPageKeysSub.unsubscribe();
-      this.loadFirstPageTcSub.unsubscribe();
-      this.getTestcasesSubscription.unsubscribe();
-      this.getTestcasesBehaviourSub.complete();
-      this.getSectionsSubscription.unsubscribe();
-      this.getSectionsBehaviourSub.complete();
+      this.developmentservice?.logout();
+      this.getProfileInfoBehaviourSub?.complete();
+      this.getProfileInfoSubscription?.unsubscribe();
+      this.loadfirstPageKeysSub?.unsubscribe();
+      this.loadFirstPageTcSub?.unsubscribe();
+      this.getTestcasesSubscription?.unsubscribe();
+      this.getTestcasesBehaviourSub?.complete();
+      this.getSectionsSubscription?.unsubscribe();
+      this.getSectionsBehaviourSub?.complete();
 }
 }
