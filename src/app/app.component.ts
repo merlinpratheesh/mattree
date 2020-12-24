@@ -51,9 +51,6 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
       let arrayeverse=val;
       if(val !== undefined){
         console.log('val',val.testcase);    
-        if(val.testcase === null)    {
-          this.getTestcasesBehaviourSub.complete()
-        }
         arrayeverse.testcase= val.testcase.reverse();
       }else{
       }
@@ -71,7 +68,7 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
     this.getProfileInfoSubscription= ProfileInfoDoc.valueChanges().subscribe(async (val: myusrinfo) => {
       
       if(val === undefined){
-        const documentExist= await this.testerApiService.docExists();
+        const documentExist=undefined;//= await this.testerApiService.docExists();
         console.log('documentExist',documentExist);
         if(documentExist !== undefined){
           const nextMonth: Date = new Date();
@@ -84,16 +81,19 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
             projectName: 'Demo'
           };
   
-          this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem);
-          this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
-          //write new record
-          this.myuserProfile.projectOwner = true;
-          this.myuserProfile.projectName = 'Demo';
-          this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
-          this.myuserProfile.membershipType = 'Demo';
-          this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
-          //other opions here for new User
-          this.myprojectFlags.showPaymentpage = false;
+          this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem).then(success=>{
+            this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+            //write new record
+            this.myuserProfile.projectOwner = true;
+            this.myuserProfile.projectName = 'Demo';
+            this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+            this.myuserProfile.membershipType = 'Demo';
+            this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
+            //other opions here for new User
+            this.myprojectFlags.showPaymentpage = false;
+            
+          });
+          
         }
 
       }
@@ -198,11 +198,6 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
               this.myProfileInfo= this.getProfileInfo(this.db.doc(('myProfile/' + myauthentication.uid)));
               this.myuserProfile.userAuthenObj = myauthentication;
               this.myuserProfile.projectLocation= 'projectList/DemoProjectKey';
-              /*this.testerApiService.docExists(this.myuserProfile.userAuthenObj.uid).then(success=>{
-                if(success === undefined){
-
-                }
-              });*/
               this.loadFirstPageKeys();
               //read keys
               this.loadFirstPageTc();
@@ -300,6 +295,13 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
     }
     componentLogOff() {
       this.developmentservice.logout();
-      this.openDialogSub?.unsubscribe();
+      this.getProfileInfoBehaviourSub.complete();
+      this.getProfileInfoSubscription.unsubscribe();
+      this.loadfirstPageKeysSub.unsubscribe();
+      this.loadFirstPageTcSub.unsubscribe();
+      this.getTestcasesSubscription.unsubscribe();
+      this.getTestcasesBehaviourSub.complete();
+      this.getSectionsSubscription.unsubscribe();
+      this.getSectionsBehaviourSub.complete();
 }
 }

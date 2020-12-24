@@ -2,7 +2,7 @@
   <div *ngIf="onlineAndAuthReady === true">
     <div *ngIf="(myauth | async) as loggedin; else loggedout">
       Main-Screen:
-      <button mat-raised-button color="primary" (click)="developmentservice.logout()"> LogOut</button>
+      <button mat-raised-button color="primary" (click)="componentLogOff()"> LogOut</button>
       
       <div *ngIf="(myProfileInfo | async) as myProfile; else newUser">
         User profile:
