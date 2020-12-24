@@ -1,10 +1,15 @@
 <div *ngIf="(myonlineAfterAuth | async) as onlineAndAuthReady; else onlineAndAuthNotReady">
   <div *ngIf="onlineAndAuthReady === true">
     <div *ngIf="(myauth | async) as loggedin; else loggedout">
-      <!-- obj exists else (null or undefined)-->
       Main-Screen:
-      <!--{{loggedin | json}}-->
       <button mat-raised-button color="primary" (click)="developmentservice.logout()"> LogOut</button>
+      
+      <div *ngIf="(myProfileInfo | async) as myProfile; else newUser">
+        User profile:
+        <pre>
+          {{myProfile | json}}
+        </pre>
+      </div>
       <div *ngIf="(Sections | async) as mySections; else nokeysinSection">
         Keys:
         <pre>
@@ -14,8 +19,7 @@
         <mat-form-field appearance="fill">
           <mat-label>{{myprojectVariables?.initialMainSection}}</mat-label>
           <mat-select [formControl]="myprojectControls?.subsectionkeysControl">
-            <mat-optgroup *ngFor="let group of mySections" [label]="group.name"
-              [disabled]="group.disabled">
+            <mat-optgroup *ngFor="let group of mySections" [label]="group.name" [disabled]="group.disabled">
               <mat-option *ngFor="let subsec of group.section"
                 [value]="{value: subsec.viewvalue, groupValue: group.name}">
                 {{subsec.viewvalue}}
@@ -24,16 +28,18 @@
           </mat-select>
         </mat-form-field>
       </div>
-
-        <div *ngIf="(SectionTc | async) as mySectionTc; else noTcsinSection">
-          TC:
-          <pre>
+      <div *ngIf="(SectionTc | async) as mySectionTc; else noTcsinSection">
+        TC:
+        <pre>
             {{mySectionTc | json}}
-          </pre>          
-        </div>
-        <ng-template #noTcsinSection>
-          No Tcs
-        </ng-template>
+          </pre>
+      </div>
+      <ng-template #newUser>
+          Wait!!
+      </ng-template>
+      <ng-template #noTcsinSection>
+        No Tcs
+      </ng-template>
       <ng-template #nokeysinSection>
         No KEYS
       </ng-template>

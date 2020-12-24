@@ -75,7 +75,13 @@ export interface projectVariables
     editProjectkeysSaved:MainSectionGroup[];
     lastSavedVisibility:boolean;
 }
-
+export interface myusrinfo{
+  MembershipEnd:string;
+  MembershipType:string;
+  projectLocation:string;
+  projectName:string;
+  projectOwner:string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -104,7 +110,7 @@ export class UserdataService {
   logout() {
     return this.auth.signOut();
   }
-  docExists(uid: string) {
-    return this.db.doc(`myProfile/${uid}`).valueChanges().pipe(first()).toPromise();
+  docExists() {
+    return this.db.doc(`projectList/DemoProjectKey`).valueChanges().pipe(first()).toPromise();
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject , Subscription,Observable } from 'rxjs';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { projectVariables,projectControls, UserdataService, MainSectionGroup,TestcaseInfo,userProfile,projectFlags } from './service/userdata.service';
+import { myusrinfo,projectVariables,projectControls, UserdataService, MainSectionGroup,TestcaseInfo,userProfile,projectFlags } from './service/userdata.service';
 import { map, switchMap,filter,take,startWith } from 'rxjs/operators';
 import { AngularFirestoreDocument } from '@angular/fire/firestore';
 import { doc } from 'rxfire/firestore';
@@ -33,8 +33,10 @@ export class AppComponent implements OnInit {
       this.getSectionsSubscription.unsubscribe();
     }
     this.getSectionsSubscription= MainAndSubSectionkeys.valueChanges().subscribe((val: any) => {
-      console.log('val',val.MainSection);
-      this.getSectionsBehaviourSub.next(val.MainSection);
+      console.log('val',val);
+      if(val !== undefined){
+        this.getSectionsBehaviourSub.next(val.MainSection);
+      }     
     });
     return this.getSectionsBehaviourSub;
   };
@@ -59,8 +61,47 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
     });
     return this.getTestcasesBehaviourSub;
   };
+  getProfileInfoSubscription:Subscription;
+  getProfileInfoBehaviourSub= new BehaviorSubject(undefined);
+  myProfileInfo;
+  getProfileInfo = (ProfileInfoDoc: AngularFirestoreDocument<myusrinfo>) => {    
+    if(this.getProfileInfoSubscription !== undefined){
+      this.getProfileInfoSubscription.unsubscribe();
+    }
+    this.getProfileInfoSubscription= ProfileInfoDoc.valueChanges().subscribe(async (val: myusrinfo) => {
+      
+      if(val === undefined){
+        const documentExist= await this.testerApiService.docExists();
+        console.log('documentExist',documentExist);
+        if(documentExist !== undefined){
+          const nextMonth: Date = new Date();
+          nextMonth.setMonth(nextMonth.getMonth() + 1);
+          const newItem = {
+            MembershipEnd: nextMonth.toDateString(),
+            MembershipType: 'Demo',
+            projectLocation: '/projectList/DemoProjectKey',
+            projectOwner: true,
+            projectName: 'Demo'
+          };
+  
+          this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem);
+          this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+          //write new record
+          this.myuserProfile.projectOwner = true;
+          this.myuserProfile.projectName = 'Demo';
+          this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+          this.myuserProfile.membershipType = 'Demo';
+          this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
+          //other opions here for new User
+          this.myprojectFlags.showPaymentpage = false;
+        }
 
- 
+      }
+      this.getProfileInfoBehaviourSub.next(val);
+    });
+    return this.getProfileInfoBehaviourSub;
+  };
+
 
   getObservableauthState = (authdetails: Observable<firebase.User>) => {
 
@@ -154,38 +195,22 @@ getTestcases = (TestcasList: AngularFirestoreDocument<TestcaseInfo>) => {
               if(myauthentication === null){// loggoff
               }else{ //logged In            
               //read tc
+              this.myProfileInfo= this.getProfileInfo(this.db.doc(('myProfile/' + myauthentication.uid)));
               this.myuserProfile.userAuthenObj = myauthentication;
               this.myuserProfile.projectLocation= 'projectList/DemoProjectKey';
-              this.testerApiService.docExists(this.myuserProfile.userAuthenObj.uid).then(success=>{
+              /*this.testerApiService.docExists(this.myuserProfile.userAuthenObj.uid).then(success=>{
                 if(success === undefined){
-                  const nextMonth: Date = new Date();
-                  nextMonth.setMonth(nextMonth.getMonth() + 1);
-                  const newItem = {
-                    MembershipEnd: nextMonth.toDateString(),
-                    MembershipType: 'Demo',
-                    projectLocation: '/projectList/DemoProjectKey',
-                    projectOwner: true,
-                    projectName: 'Demo'
-                  };
-          
-                  this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem);
-                  this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
-                  //write new record
-                  this.myuserProfile.projectOwner = true;
-                  this.myuserProfile.projectName = 'Demo';
-                  this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
-                  this.myuserProfile.membershipType = 'Demo';
-                  this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
-                  //other opions here for new User
-                  this.myprojectFlags.showPaymentpage = false;
+
                 }
-              });
+              });*/
               this.loadFirstPageKeys();
               //read keys
               this.loadFirstPageTc();
             }
               return onlineval;      
-          }))
+          }),
+          
+          )
         })        
       );
     }
