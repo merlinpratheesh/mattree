@@ -57,7 +57,6 @@
             {{mySectionTc | json}}
           </pre>
       </div>
-
       <div *ngIf="(privateList | async) as myprivateList; else noprivateList">
         <!--pre>
             Private: {{myprivateList | json}}
@@ -86,7 +85,7 @@
                 arrow_drop_down
               </mat-icon>
               <mat-autocomplete #auto2="matAutocomplete">
-                <mat-option *ngFor="let option of mainsubsectionKeys" [value]="option">
+                <mat-option *ngFor="let option of myuserProfile.mainsubsectionKeys" [value]="option">
                   {{option}}</mat-option>
               </mat-autocomplete>
             </mat-form-field>
@@ -109,7 +108,7 @@
               arrow_drop_down
             </mat-icon>
             <mat-autocomplete #auto3="matAutocomplete">
-              <mat-option *ngFor="let option of subSectionKeys" [value]="option">{{option}}
+              <mat-option *ngFor="let option of myuserProfile.subSectionKeys" [value]="option">{{option}}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
