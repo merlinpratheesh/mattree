@@ -9,12 +9,26 @@
 
   .custom-icon {
     cursor: pointer;
-  }
-  
-  
+  } 
   
   .custom-form-field-icon {
     position: absolute;
     right: 0;
     top: 0;
+  }
+
+  .drawer {
+    position: fixed;
+    height: 100vh;
+    min-width: 25%;
+    border-right: 1px solid #ccc;
+  }
+  .drawer.header {
+    position: absolute;
+    right: 0;
+    justify-content: space-between;
+  }
+  .drawer.contents {
+    padding: 160px;
+    
   }

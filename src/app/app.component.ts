@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { BehaviorSubject , Subscription,Observable } from 'rxjs';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -8,6 +8,7 @@ import { AngularFirestoreDocument } from '@angular/fire/firestore';
 import { doc } from 'rxfire/firestore';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -52,30 +53,34 @@ export class AppComponent implements OnInit {
       this.getProfileInfoSubscription.unsubscribe();
     }
     this.getProfileInfoSubscription= ProfileInfoDoc.valueChanges().subscribe(async (val: myusrinfo) => {
-      if(!Object.keys(val).length === true){
-        const documentExist=undefined;//= await this.testerApiService.docExists();
-        console.log('documentExist',documentExist);
-        if(documentExist !== undefined){
-          const nextMonth: Date = new Date();
-          nextMonth.setMonth(nextMonth.getMonth() + 1);
-          const newItem = {
-            MembershipEnd: nextMonth.toDateString(),
-            MembershipType: 'Demo',
-            projectLocation: '/projectList/DemoProjectKey',
-            projectOwner: true,
-            projectName: 'Demo'
-          };  
-          this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem).then(success=>{
-            this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
-            //write new record
-            this.myuserProfile.projectOwner = true;
-            this.myuserProfile.projectName = 'Demo';
-            this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
-            this.myuserProfile.membershipType = 'Demo';
-            this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
-            //other opions here for new User
-            this.myprojectFlags.showPaymentpage = false;            
-          });          
+      if(val === undefined){       
+        this.getSectionsBehaviourSub.next(undefined);
+      }else{
+        if(!Object.keys(val).length === true){
+          const documentExist=undefined;//= await this.testerApiService.docExists();
+          console.log('documentExist',documentExist);
+          if(documentExist !== undefined){
+            const nextMonth: Date = new Date();
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            const newItem = {
+              MembershipEnd: nextMonth.toDateString(),
+              MembershipType: 'Demo',
+              projectLocation: '/projectList/DemoProjectKey',
+              projectOwner: true,
+              projectName: 'Demo'
+            };  
+            this.db.doc<any>('myProfile/' + this.myuserProfile.userAuthenObj.uid).set(newItem).then(success=>{
+              this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+              //write new record
+              this.myuserProfile.projectOwner = true;
+              this.myuserProfile.projectName = 'Demo';
+              this.myuserProfile.projectLocation = '/projectList/DemoProjectKey';
+              this.myuserProfile.membershipType = 'Demo';
+              this.myuserProfile.endMembershipValidity = new Date(nextMonth.toDateString());
+              //other opions here for new User
+              this.myprojectFlags.showPaymentpage = false;            
+            });          
+          }
         }
       }
       this.getProfileInfoBehaviourSub.next(val);
@@ -91,7 +96,6 @@ export class AppComponent implements OnInit {
       this.getSectionsSubscription.unsubscribe();
     }
     this.getSectionsSubscription= MainAndSubSectionkeys.valueChanges().subscribe((val: any) => {
-      console.log('val',val);
       if(val === undefined){       
         this.getSectionsBehaviourSub.next(undefined);
       }else{
@@ -220,6 +224,7 @@ export class AppComponent implements OnInit {
     publicprojectControlSub: undefined,
     ownPublicprojectControlSub: undefined,
     editMainsectionGroupSub: undefined,
+    editSubsectionGroupSub: undefined,
     loadFirstPageTcSub: undefined,
     loadfirstPageKeysSub: undefined,
   };
@@ -276,6 +281,7 @@ export class AppComponent implements OnInit {
     modifiedKeysDb:undefined,
     editProjectkeysSaved: undefined
   }
+  @ViewChild('drawer') public sidenav: MatSidenav; 
   constructor(
     public afAuth: AngularFireAuth,
     public developmentservice:UserdataService,
@@ -301,33 +307,38 @@ export class AppComponent implements OnInit {
               //load public
               this.publicList= this.getPublicList(this.db.doc(('/projectList/publicProjects')));
               //load private
-              console.log(myauthentication.uid);
               this.privateList= this.getPrivateList(this.db.doc(('/projectList/' + myauthentication.uid)));
+              
               this.myprojectSub.publicprojectControlSub= this.myprojectControls.publicprojectControl.valueChanges.pipe(
-                map((some: string) => {
-                  console.log('selected-',some);
+                map((publicProjectSelected: string) => {
                   //check unique
-                  this.myuserProfile.projectName=some;
-                  this.Sections= this.getSections(this.db.doc('/publicProjectKeys/' + some));
-                })).subscribe(success=>{
-
-                });
-                this.myprojectSub.ownPublicprojectControlSub= this.myprojectControls.ownPublicprojectControl.valueChanges.pipe(
-                map((some: string) => {
-                  console.log('selected-',some);
-                  //check unique
-                  this.privateMain= this.getPrivateSections(this.db.doc('/publicProjectKeys/' + some));
-                })).subscribe(success=>{
-
-                });
-                this.myprojectSub.editMainsectionGroupSub= this.myprojectControls.editMainsectionGroup.valueChanges.pipe(
-              map((some: any) => {
-                console.log('selected-',some.editMainsectionControl);
+                  //check not null
+                  if(publicProjectSelected !== null){
+                    this.myuserProfile.projectName=publicProjectSelected;
+                    this.Sections= this.getSections(this.db.doc('/publicProjectKeys/' + publicProjectSelected));
+                  }                 
+              })).subscribe(success=>{
+              });
+              this.myprojectSub.ownPublicprojectControlSub= this.myprojectControls.ownPublicprojectControl.valueChanges.pipe(
+              map((privateProjectSelected: string) => {
+                //check unique
+                //check not null
+                if(privateProjectSelected !== null){
+                  this.privateMain= this.getPrivateSections(this.db.doc('/publicProjectKeys/' + privateProjectSelected));
+                }
+                
+              })).subscribe(success=>{
+              });
+              this.myprojectSub.editMainsectionGroupSub= this.myprojectControls.editMainsectionGroup.valueChanges.pipe(
+            map((editMainSecSelected: any) => {
+              console.log('selected-',editMainSecSelected.editMainsectionControl);
+              //check not null
+              if(editMainSecSelected.editMainsectionControl !== null){
                 this.myuserProfile.subSectionKeys=[];
                 this.myuserProfile.keysReadFromDb.forEach(eachMainfield=>
                   {
-                    if(some.editMainsectionControl !== null){
-                      if(some.editMainsectionControl === eachMainfield.name){
+                    if(editMainSecSelected.editMainsectionControl !== null){
+                      if(editMainSecSelected.editMainsectionControl === eachMainfield.name){
                         this.myuserProfile.savedisabledval=eachMainfield.disabled;
                         this.myprojectControls.visibilityMainsectionGroup.setValue({editVisibilityControl:  this.myuserProfile.savedisabledval});
                         eachMainfield.section.forEach(eachSubfield=>{
@@ -337,12 +348,22 @@ export class AppComponent implements OnInit {
                     }
                     
                   });
-                //check unique
-                
-              })).subscribe(success=>{
+                //check unique                  
+              }
 
+              })).subscribe(success=>{
               });
-               
+              this.myprojectSub.editSubsectionGroupSub= this.myprojectControls.editSubsectionGroup.valueChanges.pipe(
+                map((editSubSecSelected: any) => {
+                  console.log('selected-',editSubSecSelected.editSubsectionControl);
+                  //check not null
+                  if(editSubSecSelected.editSubsectionControl !== null){
+                    //check unique                  
+                    //Save Value
+                  }
+  
+              })).subscribe(success=>{
+              });               
             }
               return onlineval;      
           }),
@@ -451,4 +472,20 @@ export class AppComponent implements OnInit {
       this.getProfileInfoBehaviourSub?.complete();     
       this.developmentservice.logout();
 }
+draweropen(){
+
 }
+
+drawerclose() {
+  //this.myprojectVariables.mainsecsubsecSub.unsubscribe();
+  this.sidenav.close();
+}
+}
+
+//Project Flow
+/*
+User sees a key/value according to his type-> demo/Member/Expired/Guest
+User points To a key/Value from DB
+User selects a DB operation
+Updated DB State shown to the User
+*/

@@ -11,6 +11,7 @@ export interface projectSub{
   publicprojectControlSub:Subscription;
   ownPublicprojectControlSub:Subscription;
   editMainsectionGroupSub:Subscription;
+  editSubsectionGroupSub:Subscription;
   loadFirstPageTcSub:Subscription;
   loadfirstPageKeysSub:Subscription;
 }
