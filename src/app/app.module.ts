@@ -8,13 +8,15 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-
-import { environment } from '../environments/environment'
-
+import { environment } from '../environments/environment';
+import { TreeStructureComponent } from './tree-structure/tree-structure.component';
+import { PublicprojectsComponent } from './publicprojects/publicprojects.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TreeStructureComponent,
+    PublicprojectsComponent
   ],
   imports: [
     BrowserModule,
@@ -26,10 +28,6 @@ import { environment } from '../environments/environment'
     AngularFireAuthModule, // auth
     AngularFireStorageModule // storage
   ],
-  providers: [],
-
   bootstrap: [AppComponent]
 })
-export class AppModule { 
-
-}
+export class AppModule { }

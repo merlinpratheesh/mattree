@@ -1,23 +1,229 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <!-- This is the tree node template for leaf nodes -->
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-    <!-- use a disabled button to provide padding for tree leaf -->
-    <button mat-icon-button disabled></button>
-    {{node.name}}
-  </mat-tree-node>
-  <!-- This is the tree node template for expandable nodes -->
-  <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-    <button mat-icon-button matTreeNodeToggle
-            [attr.aria-label]="'Toggle ' + node.name">
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-      </mat-icon>
-    </button>
-    {{node.name}}
-  </mat-tree-node>
-</mat-tree>
+<div *ngIf="(AfterOnlineCheckAuth | async) as onlineAndAuthReady; else onlineAndAuthNotReady">
+    <div *ngIf="(loggedinstate | async) === 'firstpage' as myloggedinstate; else startPage">
+        <mat-toolbar color="primary">
+            <h1>
+                StepsWise Tracking Tool
+            </h1>
+            <span fxFlex="grow"></span>
+            <div fxHide.lt-sm>
+                Welcome {{myuserProfile?.userAuthenObj.displayName}}!
+            </div>
+            <button mat-icon-button>
+                <fa-icon (click)="componentLogOff()" class="fas faSignOutAlt fa-lg" [icon]="['fas', 'sign-out-alt']">
+                </fa-icon>
+            </button>
+        </mat-toolbar>
+
+        <div>
+            <mat-grid-list cols="3" rowHeight="100vh">
+                <mat-grid-tile colspan="1" rowspan="1" [style.background]="'cyan'">
+                    <div *ngIf="(myprofilevalbef | async) as myprofilevalbefReady; else myprofilevalbefNotReady">
+                        Profile:
+
+                        MembershipEnd: {{myprofilevalbefReady.MembershipEnd}}
+                        MembershipType:{{myprofilevalbefReady.MembershipType}}
+                        projectLocation: {{myprofilevalbefReady.projectLocation}}
+                        projectOwner: {{myprofilevalbefReady.projectOwner}}
+                        projectName: {{myprofilevalbefReady.projectName}} 
+                        
+                        <div *ngIf="(myprofileDetails | async) as myprofileDetailsReady; else myprofileDetailsNotReady">
+                            <mat-label>
+                                Profile Details:
+                            </mat-label>
+                            Profilename: {{myprofileDetailsReady?.profilenameControl}}
+                            Photourl:{{myprofileDetailsReady?.photourlControl}}
+                            Email: {{myprofileDetailsReady?.email_savedControl}}
+                            Gender:{{myprofileDetailsReady?.genderControl}}
+                            AreasOfInterest: {{myprofileDetailsReady?.areasOfInterestControl}}
+                            Skills: {{myprofileDetailsReady?.skillsControl}}
+                            <button mat-raised-button color="primary" (click)="UpdateUserProfileFlag()">Update</button>
+                        </div>
+
+                        <ng-template #myprofileDetailsNotReady>
+                            <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === false"
+                                fxLayout="column" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+                                <mat-card-content class="empty-label">
+                                    Do You want to Add User Profile?</mat-card-content>
+                                <mat-card-actions>
+                                    <button mat-raised-button color="primary" (click)="CreateUserProfile()">Add
+                                        Profile</button>
+                                </mat-card-actions>
+                            </mat-card>
+
+                            <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === true"
+                                fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+                                <mat-card-content class="empty-label">
+                                    <form [formGroup]="myprojectControls?.addProfileDetails" fxLayout="row wrap"
+                                        fxLayoutAlign="center center">
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading" >
+                                            <mat-label>Update DisplayName</mat-label>
+                                            <input matInput placeholder="Sub-Heading"
+                                                formControlName="profilenameControl">
+                                        </mat-form-field>
+
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading" >
+                                            <mat-label>Upadate Photo</mat-label>
+                                            <input matInput placeholder="Sub-Heading" formControlName="photourlControl">
+                                        </mat-form-field>
+
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Upadate Email</mat-label>
+                                            <input matInput placeholder="Sub-Heading"
+                                                formControlName="email_savedControl">
+                                        </mat-form-field>
+
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Update gender</mat-label>
+                                            <input matInput placeholder="Sub-Heading" formControlName="genderControl">
+                                        </mat-form-field>
+
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading" >
+                                            <mat-label>Update areasOfInterest</mat-label>
+                                            <input matInput placeholder="Sub-Heading"
+                                                formControlName="areasOfInterestControl">
+                                        </mat-form-field>
+
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading"
+                                        >
+                                            <mat-label>Update skills</mat-label>
+                                            <input matInput placeholder="Sub-Heading" formControlName="skillsControl">
+                                        </mat-form-field>
+                                    </form>
+                                </mat-card-content>
+                                <mat-card-actions>
+                                    <button mat-raised-button color="primary"
+                                        (click)="UpdateUserProfile()">Update</button>
+                                </mat-card-actions>
+                            </mat-card>
+
+                        </ng-template>
+                    </div>
+                    <ng-template #myprofilevalbefNotReady>
+                        <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === false"
+                        fxLayout="column" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+                        <mat-card-content class="empty-label">
+                            Do You want to Create New User?</mat-card-content>
+                        <mat-card-actions>
+                            <button mat-raised-button color="primary" (click)="CreateNewUser()">NewUser</button>
+                        </mat-card-actions>
+                    </mat-card>
+                    </ng-template>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1" rowspan="1" [style.background]="'red'">
+                    Public Tasks
+                    <app-publicprojects></app-publicprojects>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1" rowspan="1" [style.background]="'blue'" >
+                    <app-tree-structure ></app-tree-structure>
+                </mat-grid-tile>
+
+            </mat-grid-list>
 
 
-<!-- Copyright 2020 Google LLC. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license -->
+
+        </div>
+    </div>
+    <ng-template #startPage>
+        <div class="loginscreen" fxLayoutAlign="space-around center" style="height:100vh;">
+            <mat-label>
+                <div fxLayout="column" style="letter-spacing: 20px;">
+                    <h1> <strong style="font-size:40px">StepsWise Task Tracker</strong> </h1>
+                </div>
+            </mat-label>
+            <mat-card class="example-card" fxFlex="40vw" fxFlex.lt-sm="80vw">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title style="color:red;">Share Tasks</mat-card-title>
+                    <mat-card-subtitle style="color:red;">Step by Step</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div style="color:yellow; padding:0px;" fxLayout="row" fxLayoutGap="20%"
+                        fxLayoutAlign="space-between center">
+
+                        <div>
+                            <h1> Analayze all the Steps of a Task </h1>
+                            <h1> Record all the Steps for Easy Tracking </h1>
+                        </div>
+                        <div fxLayout="column" fxLayoutGap="10%">
+                            <mat-chip-list>
+                                <mat-chip
+                                    style="font-size:2em; cursor:none; opacity:.6; background-color:yellow;color: red; padding:10px;height: 60px !important;">
+                                    Logged in as</mat-chip>
+                            </mat-chip-list>
+                            <mat-chip-list>
+                                <img mat-card-avatar class="avatar" [src]="myuserProfile?.userAuthenObj.photoURL" />
+                                <mat-chip style="margin-left:15%;">{{myuserProfile?.userAuthenObj.displayName}}
+                                </mat-chip>
+
+                            </mat-chip-list>
+                            <button mat-raised-button color="primary" (click)="startfirstpage()">Continue as
+                                {{myuserProfile?.userAuthenObj.displayName}}</button>
+                        </div>
+                    </div>
+                </mat-card-content>
+
+            </mat-card>
+        </div>
+    </ng-template>
+
+
+</div>
+<ng-template #onlineAndAuthNotReady>
+    <div *ngIf="(myonline | async) as myonlineReady; else myonlineNotReady">
+        <div *ngIf="!(myauth | async) as authnotready">
+            <div *ngIf="(myauth | async) === undefined">
+                <div fxLayoutAlign="center center" style="height:100vh;">
+                    Waiting for Authentication!<mat-spinner [diameter]="30" Style="margin-left:10px;"></mat-spinner>
+                </div>
+            </div>
+            <div *ngIf="(myauth | async) === null" class="loginscreen" fxLayoutAlign="space-around center"
+                style="height:100vh;">
+
+                <mat-label>
+                    <div fxLayout="column" style="letter-spacing: 20px;">
+                        <h1> <strong style="font-size:40px">StepsWise Task Tracker</strong> </h1>
+                    </div>
+                </mat-label>
+                <mat-card class="example-card" fxFlex="40vw" fxFlex.lt-sm="80vw">
+                    <mat-card-header>
+                        <div mat-card-avatar class="example-header-image"></div>
+                        <mat-card-title style="color:red;">Share Tasks</mat-card-title>
+                        <mat-card-subtitle style="color:red;">Step by Step</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div style="color:yellow; padding:0px;" fxLayout="row" fxLayoutGap="20%"
+                            fxLayoutAlign="space-between center">
+                            <div>
+                                <h1> Analayze all the Steps of a Task </h1>
+                                <h1> Record all the Steps for Easy Tracking </h1>
+                            </div>
+                            <div fxLayout="column" fxLayoutGap="10%">
+                                <mat-chip-list>
+                                    <mat-chip
+                                        style="font-size:1.5em; cursor:none; opacity:.6; background-color:yellow;color: red; padding:10px;height: 60px !important;">
+                                        Start Tasking!!</mat-chip>
+                                </mat-chip-list>
+                                <button mat-raised-button color="primary" (click)="developmentservice.login()"> Google
+                                    login</button>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+
+                </mat-card>
+
+            </div>
+        </div>
+    </div>
+
+    <ng-template #myonlineNotReady>
+        <div *ngIf="(myonline | async)==false">
+
+            <div fxLayoutAlign="center center" style="height:100vh;">
+                Lost Internet Connection!
+            </div>
+        </div>
+    </ng-template>
+</ng-template>
