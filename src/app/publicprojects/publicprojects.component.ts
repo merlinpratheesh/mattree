@@ -16,6 +16,10 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
   myprojectControls: projectControls = {
     publicprojectControl: new FormControl(null, Validators.required)
   };
+  myuserProfile: userProfile = {
+    userAuthenObj: null,//Receive User obj after login success
+  
+  };
   publicList = of(undefined);
   localpublicList = [];
   getPublicListSubscription: Subscription;
@@ -38,10 +42,7 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
     });
     return this.getPublicListBehaviourSub;
   };
-  myuserProfile: userProfile = {
-    userAuthenObj: null,//Receive User obj after login success
-  
-  };
+
   constructor(    public developmentservice: UserdataService,private db: AngularFirestore) { }
   publicProjsel:Subscription;
 

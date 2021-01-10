@@ -1,22 +1,21 @@
-<form fxLayoutGap="20px" fxLayoutAlign="center space-around" Style="margin-top:20px;">
-    <mat-form-field appearance="fill">
-      <input #trigger1="matAutocompleteTrigger" matInput [matAutocomplete]="auto1" placeholder="Pick one or Create New"
-        aria-label="Number" [formControl]="myprojectControls?.publicprojectControl">
-      <mat-icon (click)="trigger1.panelOpen ? trigger1.closePanel() : trigger1.openPanel()"
-        class="custom-icon custom-form-field-icon">
-        arrow_drop_down
-      </mat-icon>
-      <mat-autocomplete #auto1="matAutocomplete" autoActiveFirstOption>
-        <mat-option *ngFor="let option of publicList | async" [value]="option">
-          {{option}}</mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </form>
+<div>
+    Public Tasks
+</div>
 
 
-  <mat-nav-list>
-    <mat-list-item *ngFor="let link of publicList | async">
-       <a >{{ link }}</a>
-       
-    </mat-list-item>
-  </mat-nav-list>
+<div fxLayout="column">
+    <mat-card *ngFor="let public of publicList | async" fxFlex="33" style="margin: 20px;">
+         <mat-card-header>
+              <mat-card-title>{{public}}</mat-card-title>
+         </mat-card-header>
+         <mat-card-content>
+              <form>
+                <div>
+                    Public Tasks
+                </div>              </form>
+
+         </mat-card-content>
+
+   </mat-card>
+
+</div>
