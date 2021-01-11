@@ -1,40 +1,70 @@
 <div fxLayout="column">
-    <mat-toolbar class="header" color="warn">
-        <div>Public Projects</div>
-        <span fxFlex="grow"></span>
-    </mat-toolbar>
-    <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
-        <div class="example-action-buttons">
-            <button mat-button (click)="accordion.openAll()">Expand All</button>
-            <button mat-button (click)="accordion.closeAll()">Collapse All</button>
-        </div>
-        <!-- #docregion multi -->
-        <mat-accordion class="example-headers-align" multi>
-            <!-- #enddocregion multi -->
-            <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-                <mat-expansion-panel *ngFor="let public of publicList | async" cdkDrag>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            {{public}}
-                        </mat-panel-title>
-                        <mat-panel-description>
+    <mat-tab-group animationDuration="200ms">
+        <mat-tab label=" PublicProjects">
 
-                            Display Name
-                            <mat-icon>account_circle</mat-icon>
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
+        <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
+            <mat-accordion class="example-headers-align" multi>
+                <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                    <mat-expansion-panel *ngFor="let public of publicList | async" cdkDrag>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{public}}
+                            </mat-panel-title>
 
-                    <div>
-                        Description
-                    </div>
-                    <mat-divider></mat-divider>
+                            <mat-panel-description>
 
-                </mat-expansion-panel>
+                                Display Name
+                                <mat-icon>account_circle</mat-icon>
+
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <div>
+                            Description
+                            <button>
+                                See Details
+                            </button>
+                        </div>
+                        <mat-divider style="colour:red"></mat-divider>
+
+                    </mat-expansion-panel>
                 </div>
-        </mat-accordion>
+            </mat-accordion>
 
-    </cdk-virtual-scroll-viewport>
-    <!-- Copyright 2020 Google LLC. All Rights Reserved.
-        Use of this source code is governed by an MIT-style license that
-        can be found in the LICENSE file at http://angular.io/license -->
+        </cdk-virtual-scroll-viewport>
+        </mat-tab>
+        <mat-tab label="PrivateProjects">
+            <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
+                <mat-accordion class="example-headers-align" multi>
+                    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                        <mat-expansion-panel *ngFor="let public of publicList | async" cdkDrag>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{public}}
+                                </mat-panel-title>
+
+                                <mat-panel-description>
+
+                                    Display Name
+                                    <mat-icon>account_circle</mat-icon>
+
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+
+                            <div>
+                                Description
+                                <button>
+                                    See Details
+                                </button>
+                            </div>
+                            <mat-divider style="colour:red"></mat-divider>
+
+                        </mat-expansion-panel>
+                    </div>
+                </mat-accordion>
+
+            </cdk-virtual-scroll-viewport>
+        </mat-tab>
+    </mat-tab-group>
+
 </div>

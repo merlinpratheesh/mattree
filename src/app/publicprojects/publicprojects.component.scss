@@ -103,18 +103,15 @@
 
   .scroll-viewport {
     margin:10px;
-    top:30px;
-    height:550px;
-    width: 510px;
-    border: 1px solid black;
+    top:0px;
+    height:525px;
+    width: 525px;
   }
   
   .scroll-item {
     height: 50px;
   }
-  .example-action-buttons {
-    padding-bottom: 20px;
-  }
+ 
   
   .example-headers-align .mat-expansion-panel-header-title,
   .example-headers-align .mat-expansion-panel-header-description {
@@ -129,4 +126,12 @@
   .example-headers-align .mat-form-field + .mat-form-field {
     margin-left: 8px;
   }
-  
+  .tap
+  {
+    display: inline-block;
+    margin: 16px;
+    padding: 5px 5px;
+    text-align: center;
+    box-sizing: border-box;
+
+  }
