@@ -52,21 +52,21 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
   };
 
   constructor(    public developmentservice: UserdataService,private db: AngularFirestore) { }
-  publicProjsel:Subscription;
+  publicview:Subscription;
 
   ngOnInit(): void {
-    this.myuserProfile.userAuthenObj=this.profileinfoUid;
+    //this.myuserProfile.userAuthenObj=this.profileinfoUid;
   }
+
   ngAfterViewInit(){
-    this.publicProjsel = this.myprojectControls.publicprojectControl.valueChanges.pipe(
+    console.log(this.profileinfoUid);
+
+    this.publicview = this.myprojectControls.publicprojectControl.valueChanges.pipe(
       startWith(''),
       map((publicProjectSelected: string) => {
-        if (!publicProjectSelected || publicProjectSelected === '') {
-          this.localpublicList = [];
-          this.getPublicListSubscription?.unsubscribe();
+         console.log(publicProjectSelected);
           this.publicList = this.getPublicList(this.db.doc(('/projectList/publicProjects')));    
-          return publicProjectSelected;
-        }
+        
       })).subscribe(_=>{
 
       });
@@ -75,7 +75,7 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
     moveItemInArray(this.localpublicList, event.previousIndex, event.currentIndex);
   }
   ngOnDestroy(){
-    this.publicProjsel.unsubscribe();
+    this.publicview.unsubscribe();
     this.getPublicListSubscription?.unsubscribe();
   }
 

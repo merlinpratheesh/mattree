@@ -1,0 +1,37 @@
+<div fxLayout="column">
+    <mat-tab-group animationDuration="200ms">
+        <mat-tab label="PrivateProjects">
+            <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
+                <mat-accordion class="example-headers-align" multi>
+                    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                        <mat-expansion-panel *ngFor="let private of privateList | async" cdkDrag>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{private}}
+                                </mat-panel-title>
+
+                                <mat-panel-description>
+
+                                    Display Name
+                                    <mat-icon>account_circle</mat-icon>
+
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+
+                            <div>
+                                Description
+                                <button>
+                                    See Details
+                                </button>
+                            </div>
+                            <mat-divider style="color:red"></mat-divider>
+
+                        </mat-expansion-panel>
+                    </div>
+                </mat-accordion>
+
+            </cdk-virtual-scroll-viewport>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>

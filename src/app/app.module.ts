@@ -11,12 +11,14 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { TreeStructureComponent } from './tree-structure/tree-structure.component';
 import { PublicprojectsComponent } from './publicprojects/publicprojects.component';
+import { PrivateprojectsComponent } from './privateprojects/privateprojects.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TreeStructureComponent,
-    PublicprojectsComponent
+    PublicprojectsComponent,
+    PrivateprojectsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 
-import { Component, ViewChild,AfterViewInit } from '@angular/core';
+import { Component, ViewChild,AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject, Subscription, Observable,of } from 'rxjs';
 import { UserdataService, userProfile,usrinfo, projectFlags, usrinfoDetails,projectControls } from './service/userdata.service';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -141,6 +141,8 @@ const TREE_DATA = JSON.stringify({
   providers: [FileDatabase]
 })
 export class AppComponent implements AfterViewInit{
+  @Output() profileinfoUid  = new EventEmitter<firebase.User>();
+
   title = 'goldenNoStrict';
   myauth;
   loggedinstate:Observable<string>=new BehaviorSubject(undefined);
@@ -180,7 +182,7 @@ export class AppComponent implements AfterViewInit{
     testcaseInfoControl: new FormControl(),
     createTestcaseControl: new FormControl(),
     publicprojectControl: new FormControl(null, Validators.required),
-    ownPublicprojectControl: new FormControl(null, Validators.required),
+    PrivateprojectControl: new FormControl(null, Validators.required),
     firstMainSecControl: new FormControl(null, Validators.required),
     editMainsectionGroup: this.fb.group({
       editMainsectionControl: [{ value: '' }, Validators.required]
