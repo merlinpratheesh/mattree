@@ -4,22 +4,37 @@
         <span fxFlex="grow"></span>
     </mat-toolbar>
     <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
+        <div class="example-action-buttons">
+            <button mat-button (click)="accordion.openAll()">Expand All</button>
+            <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+        </div>
+        <!-- #docregion multi -->
+        <mat-accordion class="example-headers-align" multi>
+            <!-- #enddocregion multi -->
+            <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                <mat-expansion-panel *ngFor="let public of publicList | async" cdkDrag>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{public}}
+                        </mat-panel-title>
+                        <mat-panel-description>
 
-            <mat-card cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                            Display Name
+                            <mat-icon>account_circle</mat-icon>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
 
-                <div class="drag-box" class="scroll-item" *ngFor="let public of publicList | async" cdkDrag>
-
-
-
-                    {{public}}
-
-
-
+                    <div>
+                        Description
+                    </div>
                     <mat-divider></mat-divider>
 
+                </mat-expansion-panel>
                 </div>
-            </mat-card>
-
+        </mat-accordion>
 
     </cdk-virtual-scroll-viewport>
+    <!-- Copyright 2020 Google LLC. All Rights Reserved.
+        Use of this source code is governed by an MIT-style license that
+        can be found in the LICENSE file at http://angular.io/license -->
 </div>
