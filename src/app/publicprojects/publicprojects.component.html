@@ -1,21 +1,25 @@
-<div>
-    Public Tasks
-</div>
-
-
 <div fxLayout="column">
-    <mat-card *ngFor="let public of publicList | async" fxFlex="33" style="margin: 20px;">
-         <mat-card-header>
-              <mat-card-title>{{public}}</mat-card-title>
-         </mat-card-header>
-         <mat-card-content>
-              <form>
-                <div>
-                    Public Tasks
-                </div>              </form>
+    <mat-toolbar class="header" color="warn">
+        <div>Public Projects</div>
+        <span fxFlex="grow"></span>
+    </mat-toolbar>
+    <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
 
-         </mat-card-content>
+            <mat-card cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
 
-   </mat-card>
+                <div class="drag-box" class="scroll-item" *ngFor="let public of publicList | async" cdkDrag>
 
+
+
+                    {{public}}
+
+
+
+                    <mat-divider></mat-divider>
+
+                </div>
+            </mat-card>
+
+
+    </cdk-virtual-scroll-viewport>
 </div>

@@ -15,8 +15,12 @@
         </mat-toolbar>
 
         <div>
-            <mat-grid-list cols="3" rowHeight="100vh">
-                <mat-grid-tile colspan="1" rowspan="1" [style.background]="'cyan'">
+            <mat-grid-list cols="10" rowHeight="50vh">
+                <mat-grid-tile colspan="2" rowspan="1" [style.background]="'cyan'">
+                    <mat-toolbar class="header" color="warn">
+                        <div>Profile</div>
+                        <span fxFlex="grow"></span>
+                    </mat-toolbar>
                     <div *ngIf="(myprofilevalbef | async) as myprofilevalbefReady; else myprofilevalbefNotReady">
                         Profile:
 
@@ -24,8 +28,8 @@
                         MembershipType:{{myprofilevalbefReady.MembershipType}}
                         projectLocation: {{myprofilevalbefReady.projectLocation}}
                         projectOwner: {{myprofilevalbefReady.projectOwner}}
-                        projectName: {{myprofilevalbefReady.projectName}} 
-                        
+                        projectName: {{myprofilevalbefReady.projectName}}
+
                         <div *ngIf="(myprofileDetails | async) as myprofileDetailsReady; else myprofileDetailsNotReady">
                             <mat-label>
                                 Profile Details:
@@ -55,13 +59,13 @@
                                 <mat-card-content class="empty-label">
                                     <form [formGroup]="myprojectControls?.addProfileDetails" fxLayout="row wrap"
                                         fxLayoutAlign="center center">
-                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading" >
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
                                             <mat-label>Update DisplayName</mat-label>
                                             <input matInput placeholder="Sub-Heading"
                                                 formControlName="profilenameControl">
                                         </mat-form-field>
 
-                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading" >
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
                                             <mat-label>Upadate Photo</mat-label>
                                             <input matInput placeholder="Sub-Heading" formControlName="photourlControl">
                                         </mat-form-field>
@@ -77,14 +81,13 @@
                                             <input matInput placeholder="Sub-Heading" formControlName="genderControl">
                                         </mat-form-field>
 
-                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading" >
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
                                             <mat-label>Update areasOfInterest</mat-label>
                                             <input matInput placeholder="Sub-Heading"
                                                 formControlName="areasOfInterestControl">
                                         </mat-form-field>
 
-                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading"
-                                        >
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
                                             <mat-label>Update skills</mat-label>
                                             <input matInput placeholder="Sub-Heading" formControlName="skillsControl">
                                         </mat-form-field>
@@ -99,23 +102,32 @@
                         </ng-template>
                     </div>
                     <ng-template #myprofilevalbefNotReady>
-                        <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === false"
-                        fxLayout="column" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
-                        <mat-card-content class="empty-label">
-                            Do You want to Create New User?</mat-card-content>
-                        <mat-card-actions>
-                            <button mat-raised-button color="primary" (click)="CreateNewUser()">NewUser</button>
-                        </mat-card-actions>
-                    </mat-card>
+                        <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === false" fxLayout="column"
+                            fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+                            <mat-card-content class="empty-label">
+                                Do You want to Create New User?</mat-card-content>
+                            <mat-card-actions>
+                                <button mat-raised-button color="primary" (click)="CreateNewUser()">NewUser</button>
+                            </mat-card-actions>
+                        </mat-card>
                     </ng-template>
                 </mat-grid-tile>
 
-                <mat-grid-tile colspan="1" rowspan="1" [style.background]="'red'">
+
+                <mat-grid-tile colspan="4" rowspan="2" [style.background]="'red'">
+
                     <app-publicprojects></app-publicprojects>
                 </mat-grid-tile>
 
-                <mat-grid-tile colspan="1" rowspan="1" [style.background]="'blue'" >
-                    <app-tree-structure ></app-tree-structure>
+                <mat-grid-tile colspan="4" rowspan="2" [style.background]="'blue'">
+                    <mat-toolbar class="header" color="warn">
+                        <div>Keys</div>
+                        <span fxFlex="grow"></span>
+                    </mat-toolbar>
+                    <app-tree-structure></app-tree-structure>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="2" rowspan="1" [style.background]="'Orange'">
+                    Become MEmber
                 </mat-grid-tile>
 
             </mat-grid-list>
