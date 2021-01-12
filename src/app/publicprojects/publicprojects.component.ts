@@ -59,12 +59,10 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   ngAfterViewInit(){
-    console.log(this.profileinfoUid);
 
     this.publicview = this.myprojectControls.publicprojectControl.valueChanges.pipe(
       startWith(''),
       map((publicProjectSelected: string) => {
-         console.log(publicProjectSelected);
           this.publicList = this.getPublicList(this.db.doc(('/projectList/publicProjects')));    
         
       })).subscribe(_=>{

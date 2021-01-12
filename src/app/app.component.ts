@@ -522,7 +522,6 @@ myusrinfoDetails:usrinfoDetails={
   UpdateUserProfileFlag(){
     this.myprofileDetails=of(undefined);
     this.myprojectFlags.newuserProfileDetails = true;
-    this.myprojectControls.addProfileDetails.reset();
     this.myprojectControls.addProfileDetails.enable();    
   }
   CreateUserProfile(){

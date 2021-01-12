@@ -8,6 +8,7 @@ import { projectControls, UserdataService, userProfile } from '../service/userda
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {ChangeDetectionStrategy} from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
+import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-privateprojects',
@@ -20,6 +21,7 @@ import { MatAccordion } from '@angular/material/expansion';
 export class PrivateprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @Input() profileinfoUid: firebase.User;
+
   myprojectControls: projectControls = {
     PrivateprojectControl: new FormControl(null, Validators.required)
   };
@@ -67,7 +69,7 @@ export class PrivateprojectsComponent implements OnInit,AfterViewInit,OnDestroy 
       startWith(''),
       map((privateProjectSelected: string) => {
 
-        this.privateList = this.getPrivateList(this.db.doc(('/projectList/HO0jOOqH3KOnpS5qrdd0WyLGd4v1/')));
+        this.privateList = this.getPrivateList(this.db.doc(('/projectList/' + this.myuserProfile.userAuthenObj.uid)));
         console.log(this.privateList);
 
 
@@ -78,6 +80,7 @@ export class PrivateprojectsComponent implements OnInit,AfterViewInit,OnDestroy 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.localprivateList, event.previousIndex, event.currentIndex);
   }
+
   ngOnDestroy(){
     this.privateview.unsubscribe();
     this.getPrivateListSubscription?.unsubscribe();
