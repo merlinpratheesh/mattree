@@ -50,17 +50,13 @@
   .NewProject {
     line-height: 1.5;
     color: var(--warm-gray-60,#0575e6);
-    box-sizing: inherit;
     font-size: 100%;
+    padding-left: 275px;
     background: transparent;
-    margin-top: 4px!important;
-    margin-left: 10px!important;
-    margin-right: 10px!important;
     align-items: center!important;
     display: flex!important;
     border: 1px solid var(--color-background-faint-active);
     border-radius: 35px!important;
-    padding-left: 16px!important;
 }
 
 
