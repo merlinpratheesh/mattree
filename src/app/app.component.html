@@ -30,120 +30,109 @@
                 </fa-icon>
             </button>
         </mat-toolbar>
-                        <mat-grid-tile colspan="16" rowspan="20" [style.background]="'cyan'">
-                            <div *ngIf="(myprofilevalbef | async) as myprofilevalbefReady">
-                                <div class="profile-pic">
-                                    <img mat-card-avatar class="avatar-sample"
-                                        [src]="myuserProfile?.userAuthenObj.photoURL" />
+        <mat-grid-tile colspan="16" rowspan="20" [style.background]="'cyan'">
+            <div *ngIf="(myprofilevalbef | async) as myprofilevalbefReady">
+                <div class="profile-pic">
+                    <img mat-card-avatar class="avatar-sample" [src]="myuserProfile?.userAuthenObj.photoURL" />
 
-                                    <div class=" user-detail">
-                                        <h1> Hi {{myuserProfile?.userAuthenObj.displayName }}</h1>
-                                        <h3> MembershipType:{{myprofilevalbefReady.MembershipType}}</h3>
-                                        <h3> Current ProjectName: {{myprofilevalbefReady.projectName}}</h3>
-                                        <h3> MemberStill: {{myprofilevalbefReady.MembershipEnd}}</h3>
-                                    </div>
-                                </div>
-                                <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
-                                    <div
-                                        *ngIf="(myprofilevalbef | async) as myprofilevalbefReady; else myprofilevalbefNotReady">
+                    <div class=" user-detail">
+                        <h1> Hi {{myuserProfile?.userAuthenObj.displayName }}</h1>
+                        <h3> MembershipType:{{myprofilevalbefReady.MembershipType}}</h3>
+                        <h3> Current ProjectName: {{myprofilevalbefReady.projectName}}</h3>
+                        <h3> MemberStill: {{myprofilevalbefReady.MembershipEnd}}</h3>
+                    </div>
+                </div>
+                <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
+                    <div *ngIf="(myprofilevalbef | async) as myprofilevalbefReady; else myprofilevalbefNotReady">
 
-                                        <div
-                                            *ngIf="(myprofileDetails | async) as myprofileDetailsReady; else myprofileDetailsNotReady">
-                                            <mat-label>
-                                                Profile Details:
-                                            </mat-label>
-                                            Profilename: {{myprofileDetailsReady?.profilenameControl}}<br>
-                                            Photourl:{{myprofileDetailsReady?.photourlControl}}<br>
-                                            Email: {{myprofileDetailsReady?.email_savedControl}}<br>
-                                            Gender:{{myprofileDetailsReady?.genderControl}}<br>
-                                            AreasOfInterest: {{myprofileDetailsReady?.areasOfInterestControl}}<br>
-                                            Skills: {{myprofileDetailsReady?.skillsControl}}<br>
-                                            <button mat-raised-button color="primary"
-                                                (click)="UpdateUserProfileFlag()">Update</button>
-                                        </div>
+                        <div *ngIf="(myprofileDetails | async) as myprofileDetailsReady; else myprofileDetailsNotReady">
+                            <mat-label>
+                                Profile Details:
+                            </mat-label>
+                            Profilename: {{myprofileDetailsReady?.profilenameControl}}<br>
+                            Photourl:{{myprofileDetailsReady?.photourlControl}}<br>
+                            Email: {{myprofileDetailsReady?.email_savedControl}}<br>
+                            Gender:{{myprofileDetailsReady?.genderControl}}<br>
+                            AreasOfInterest: {{myprofileDetailsReady?.areasOfInterestControl}}<br>
+                            Skills: {{myprofileDetailsReady?.skillsControl}}<br>
+                            <button mat-raised-button color="primary" (click)="UpdateUserProfileFlag()">Update</button>
+                        </div>
 
-                                        <ng-template #myprofileDetailsNotReady>
-                                            <mat-card class="list"
-                                                *ngIf="myprojectFlags.newuserProfileDetails === false" fxLayout="column"
-                                                fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
-                                                <mat-card-content class="empty-label">
-                                                    Do You want to Add User Profile?</mat-card-content>
-                                                <mat-card-actions>
-                                                    <button mat-raised-button color="primary"
-                                                        (click)="CreateUserProfile()">Add
-                                                        Profile</button>
-                                                </mat-card-actions>
-                                            </mat-card>
+                        <ng-template #myprofileDetailsNotReady>
+                            <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === false"
+                                fxLayout="column" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+                                <mat-card-content class="empty-label">
+                                    Do You want to Add User Profile?</mat-card-content>
+                                <mat-card-actions>
+                                    <button mat-raised-button color="primary" (click)="CreateUserProfile()">Add
+                                        Profile</button>
+                                </mat-card-actions>
+                            </mat-card>
 
-                                            <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === true"
-                                                fxLayout="row wrap" fxLayout.lt-sm="column"
-                                                fxLayoutAlign="space-around center">
-                                                <mat-card-content class="empty-label">
-                                                    <form [formGroup]="myprojectControls?.addProfileDetails"
-                                                        fxLayout="row wrap" fxLayoutAlign="center center">
-                                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
-                                                            <mat-label>Update DisplayName</mat-label>
-                                                            <input matInput placeholder="Sub-Heading"
-                                                                formControlName="profilenameControl">
-                                                        </mat-form-field>
+                            <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === true"
+                                fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+                                <mat-card-content class="empty-label">
+                                    <form [formGroup]="myprojectControls?.addProfileDetails" fxLayout="row wrap"
+                                        fxLayoutAlign="center center">
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Update DisplayName</mat-label>
+                                            <input matInput placeholder="Sub-Heading"
+                                                formControlName="profilenameControl">
+                                        </mat-form-field>
 
-                                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
-                                                            <mat-label>Upadate Photo</mat-label>
-                                                            <input matInput placeholder="Sub-Heading"
-                                                                formControlName="photourlControl">
-                                                        </mat-form-field>
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Upadate Photo</mat-label>
+                                            <input matInput placeholder="Sub-Heading" formControlName="photourlControl">
+                                        </mat-form-field>
 
-                                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
-                                                            <mat-label>Upadate Email</mat-label>
-                                                            <input matInput placeholder="Sub-Heading"
-                                                                formControlName="email_savedControl">
-                                                        </mat-form-field>
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Upadate Email</mat-label>
+                                            <input matInput placeholder="Sub-Heading"
+                                                formControlName="email_savedControl">
+                                        </mat-form-field>
 
-                                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
-                                                            <mat-label>Update gender</mat-label>
-                                                            <input matInput placeholder="Sub-Heading"
-                                                                formControlName="genderControl">
-                                                        </mat-form-field>
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Update gender</mat-label>
+                                            <input matInput placeholder="Sub-Heading" formControlName="genderControl">
+                                        </mat-form-field>
 
-                                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
-                                                            <mat-label>Update areasOfInterest</mat-label>
-                                                            <input matInput placeholder="Sub-Heading"
-                                                                formControlName="areasOfInterestControl">
-                                                        </mat-form-field>
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Update areasOfInterest</mat-label>
+                                            <input matInput placeholder="Sub-Heading"
+                                                formControlName="areasOfInterestControl">
+                                        </mat-form-field>
 
-                                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
-                                                            <mat-label>Update skills</mat-label>
-                                                            <input matInput placeholder="Sub-Heading"
-                                                                formControlName="skillsControl">
-                                                        </mat-form-field>
-                                                    </form>
-                                                </mat-card-content>
-                                                <mat-card-actions>
-                                                    <button mat-raised-button color="primary"
-                                                        (click)="UpdateUserProfile()">Update</button>
-                                                </mat-card-actions>
-                                            </mat-card>
+                                        <mat-form-field appearance="fill" floatLabel="Edit Sub-Heading">
+                                            <mat-label>Update skills</mat-label>
+                                            <input matInput placeholder="Sub-Heading" formControlName="skillsControl">
+                                        </mat-form-field>
+                                    </form>
+                                </mat-card-content>
+                                <mat-card-actions>
+                                    <button mat-raised-button color="primary"
+                                        (click)="UpdateUserProfile()">Update</button>
+                                </mat-card-actions>
+                            </mat-card>
 
-                                        </ng-template>
+                        </ng-template>
 
-                                    </div>
-                                </cdk-virtual-scroll-viewport>
-                            </div>
+                    </div>
+                </cdk-virtual-scroll-viewport>
+            </div>
 
 
 
-                            <ng-template #myprofilevalbefNotReady>
-                                <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === false"
-                                    fxLayout="column" fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
-                                    <mat-card-content class="empty-label">
-                                        Do You want to Create New User?</mat-card-content>
-                                    <mat-card-actions>
-                                        <button mat-raised-button color="primary"
-                                            (click)="CreateNewUser()">NewUser</button>
-                                    </mat-card-actions>
-                                </mat-card>
-                            </ng-template>
-                        </mat-grid-tile>
+            <ng-template #myprofilevalbefNotReady>
+                <mat-card class="list" *ngIf="myprojectFlags.newuserProfileDetails === false" fxLayout="column"
+                    fxLayout.lt-sm="column" fxLayoutAlign="space-around center">
+                    <mat-card-content class="empty-label">
+                        Do You want to Create New User?</mat-card-content>
+                    <mat-card-actions>
+                        <button mat-raised-button color="primary" (click)="CreateNewUser()">NewUser</button>
+                    </mat-card-actions>
+                </mat-card>
+            </ng-template>
+        </mat-grid-tile>
         <div>
 
 
@@ -305,7 +294,7 @@
 
         </div>
     </div>
-    <ng-template #startPage>
+    <div #startPage>
         <div class="loginscreen" fxLayoutAlign="space-around center" style="height:100vh;">
             <mat-label>
                 <div fxLayout="column" style="letter-spacing: 20px;">
@@ -346,10 +335,10 @@
 
             </mat-card>
         </div>
-    </ng-template>
-
-
+    </div>
 </div>
+
+
 <ng-template #onlineAndAuthNotReady>
     <div *ngIf="(myonline | async) as myonlineReady; else myonlineNotReady">
         <div *ngIf="!(myauth | async) as authnotready">
@@ -358,8 +347,7 @@
                     Waiting for Authentication!<mat-spinner [diameter]="30" Style="margin-left:10px;"></mat-spinner>
                 </div>
             </div>
-            <div *ngIf="(myauth | async) === null" class="loginscreen" fxLayoutAlign="space-around center"
-                style="height:100vh;">
+            <div *ngIf="(myauth | async) === null" class="loginscreen" fxLayoutAlign="space-around center">
                 <mat-toolbar color="primary">
                     <h1>
                         StepsWise Tracking Tool
@@ -382,140 +370,78 @@
                     <span fxFlex="grow">
 
                     </span>
-                    <div fxHide.lt-sm>
-                        Welcome {{myuserProfile?.userAuthenObj.displayName}}!
-                    </div>
-                    <button mat-icon-button>
-                        <fa-icon (click)="componentLogOff()" class="fas faSignOutAlt fa-lg"
-                            [icon]="['fas', 'sign-out-alt']">
-                        </fa-icon>
-                    </button>
+
                 </mat-toolbar>
 
                 <div>
-
-
-                    <mat-grid-list cols="80" rowHeight="5vh">
-                        <mat-grid-tile colspan="80" rowspan="1" style="background: rgba(170, 139, 139, 0.575)">
-
-                        </mat-grid-tile>
-
-                        <mat-grid-tile colspan="1" rowspan="20" style="background:rgba(170, 139, 139, 0.575)">
-
-                        </mat-grid-tile>
-
-
-
-
-
-                        <mat-grid-tile colspan="32" rowspan="20" [style.background]="'blue'">
-
-                            <mat-tab-group>
-                                <mat-tab>
-                                    <ng-template mat-tab-label class="header" color="white">Public</ng-template>
-                                    <ng-template matTabContent>
-                                        <app-publicprojects></app-publicprojects>
-                                    </ng-template>
-                                </mat-tab>
-                                <mat-tab>
-                                    <ng-template mat-tab-label class="header" color="white">Private</ng-template>
-                                    <ng-template matTabContent>
-                                        <app-privateprojects [profileinfoUid]="myuserProfile?.userAuthenObj">
-                                        </app-privateprojects>
-                                    </ng-template>
-                                </mat-tab>
-                            </mat-tab-group>
-                        </mat-grid-tile>
-                        <mat-grid-tile colspan="30" rowspan="20" [style.background]="'blue'">
-                            <mat-toolbar class="header" color="warn">
-                                <div>Keys</div>
-                                <span fxFlex="grow"></span>
-                            </mat-toolbar>
-                            <app-tree-structure></app-tree-structure>
-                        </mat-grid-tile>
-                        <mat-grid-tile colspan="1" rowspan="20" style="background: rgba(170, 139, 139, 0.575)">
-
-                        </mat-grid-tile>
-                        <mat-grid-tile colspan="80" rowspan="1" style="background: rgba(170, 139, 139, 0.575)">
-
-                        </mat-grid-tile>
-                    </mat-grid-list>
-
-
-
                 </div>
             </div>
-            <ng-template #startPage>
-                <div class="loginscreen" fxLayoutAlign="space-around center" style="height:100vh;">
-                    <mat-label>
-                        <div fxLayout="column" style="letter-spacing: 20px;">
-                            <h1> <strong style="font-size:40px">StepsWise Task Tracker</strong> </h1>
-                        </div>
-                    </mat-label>
-                    <mat-card class="example-card" fxFlex="40vw" fxFlex.lt-sm="80vw">
-                        <mat-card-header>
-                            <div mat-card-avatar class="example-header-image"></div>
-                            <mat-card-title style="color:red;">Share Tasks</mat-card-title>
-                            <mat-card-subtitle style="color:red;">Step by Step</mat-card-subtitle>
-                        </mat-card-header>
+            <mat-grid-list cols="80" rowHeight="5vh">
+                <mat-grid-tile colspan="80" rowspan="1" style="background: rgba(170, 139, 139, 0.575)">
+
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1" rowspan="20" style="background:rgba(170, 139, 139, 0.575)">
+
+                </mat-grid-tile>
+                <mat-grid-tile colspan="32" rowspan="20" [style.background]="'blue'">
+
+                    <mat-tab-group>
+                        <mat-tab>
+                            <ng-template mat-tab-label class="header" color="white">Public</ng-template>
+                            <ng-template matTabContent>
+                                <app-publicprojects></app-publicprojects>
+                            </ng-template>
+                        </mat-tab>
+                        <mat-tab>
+                            <ng-template mat-tab-label class="header" color="white">Private</ng-template>
+                            <ng-template matTabContent>
+                                <app-privateprojects [profileinfoUid]="myuserProfile?.userAuthenObj">
+                                </app-privateprojects>
+                            </ng-template>
+                        </mat-tab>
+                    </mat-tab-group>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="30" rowspan="20" [style.background]="'blue'">
+                    <mat-toolbar class="header" color="warn">
+                        <div>Keys</div>
+                        <span fxFlex="grow"></span>
+                    </mat-toolbar>
+                    <app-tree-structure></app-tree-structure>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="16" rowspan="20" [style.background]="'blue'">
+                    <mat-card class="example-card" fxFlex="100px" fxFlex.lt-sm="40vw">
+
                         <mat-card-content>
-                            <div style="color:yellow; padding:0px;" fxLayout="row" fxLayoutGap="20%"
+                            <div style="color:yellow; padding:0px;" fxLayout="column"
                                 fxLayoutAlign="space-between center">
 
-                                <div>
-                                    <h1> Analayze all the Steps of a Task </h1>
-                                    <h1> Record all the Steps for Easy Tracking </h1>
-                                </div>
                                 <div fxLayout="column" fxLayoutGap="10%">
                                     <mat-chip-list>
                                         <mat-chip
-                                            style="font-size:2em; cursor:none; opacity:.6; background-color:yellow;color: red; padding:10px;height: 60px !important;">
-                                            Logged in as</mat-chip>
+                                            style="font-size:1.5em; cursor:none; opacity:.6; background-color:yellow;color: red; padding:10px;height: 60px !important;">
+                                            Start Tasking!!</mat-chip>
                                     </mat-chip-list>
-                                    <mat-chip-list>
-                                        <img mat-card-avatar class="avatar"
-                                            [src]="myuserProfile?.userAuthenObj.photoURL" />
-                                        <mat-chip style="margin-left:15%;">{{myuserProfile?.userAuthenObj.displayName}}
-                                        </mat-chip>
-
-                                    </mat-chip-list>
-                                    <button mat-raised-button color="primary" (click)="startfirstpage()">Continue as
-                                        {{myuserProfile?.userAuthenObj.displayName}}</button>
+                                    <button mat-raised-button color="primary" (click)="developmentservice.login()">
+                                        Google
+                                        login</button>
                                 </div>
+
                             </div>
                         </mat-card-content>
 
+
                     </mat-card>
-                </div>
-            </ng-template>
 
-            <mat-card class="example-card" fxFlex="40vw" fxFlex.lt-sm="80vw">
-                <mat-card-header>
-                    <div mat-card-avatar class="example-header-image"></div>
-                    <mat-card-title style="color:red;">Share Tasks</mat-card-title>
-                    <mat-card-subtitle style="color:red;">Step by Step</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <div style="color:yellow; padding:0px;" fxLayout="row" fxLayoutGap="20%"
-                        fxLayoutAlign="space-between center">
-                        <div>
-                            <h1> Analayze all the Steps of a Task </h1>
-                            <h1> Record all the Steps for Easy Tracking </h1>
-                        </div>
-                        <div fxLayout="column" fxLayoutGap="10%">
-                            <mat-chip-list>
-                                <mat-chip
-                                    style="font-size:1.5em; cursor:none; opacity:.6; background-color:yellow;color: red; padding:10px;height: 60px !important;">
-                                    Start Tasking!!</mat-chip>
-                            </mat-chip-list>
-                            <button mat-raised-button color="primary" (click)="developmentservice.login()"> Google
-                                login</button>
-                        </div>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="1" rowspan="20" style="background: rgba(170, 139, 139, 0.575)">
 
-                    </div>
-                </mat-card-content>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="80" rowspan="1" style="background: rgba(170, 139, 139, 0.575)">
 
-            </mat-card>
+                </mat-grid-tile>
+            </mat-grid-list>
+
 
         </div>
     </div>
