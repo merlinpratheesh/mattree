@@ -143,7 +143,7 @@ const TREE_DATA = JSON.stringify({
 export class AppComponent implements AfterViewInit{
   title = 'goldenNoStrict';
   myauth;
-  loggedinstate:Observable<string>=new BehaviorSubject(undefined);
+  loggedinstate:Observable<string>=new BehaviorSubject('firstpage');
   subjectauth = new BehaviorSubject(undefined);
   getObservableauthStateSub: Subscription = new Subscription;
   getObservableauthState = (authdetails: Observable<firebase.User>) => {
@@ -180,7 +180,7 @@ export class AppComponent implements AfterViewInit{
     testcaseInfoControl: new FormControl(),
     createTestcaseControl: new FormControl(),
     publicprojectControl: new FormControl(null, Validators.required),
-    ownPublicprojectControl: new FormControl(null, Validators.required),
+    PrivateprojectControl: new FormControl(null, Validators.required),
     firstMainSecControl: new FormControl(null, Validators.required),
     editMainsectionGroup: this.fb.group({
       editMainsectionControl: [{ value: '' }, Validators.required]
@@ -205,7 +205,7 @@ export class AppComponent implements AfterViewInit{
     showPaymentpage: false,
     newuserCheck: false,
     firstTestcaseEdit: false,
-    newuserProfileDetails: false
+    newuserProfileDetails: true
 
   };
 
@@ -537,7 +537,7 @@ myusrinfoDetails:usrinfoDetails={
   componentLogOff() {
     this.myprojectFlags.newuserProfileDetails = false;
     this.myprofileDetails=of(undefined);
-    this.loggedinstate=of('undefined');
+    this.loggedinstate=of('startpage');
     this.developmentservice.logout();
   }
   draweropen() {
