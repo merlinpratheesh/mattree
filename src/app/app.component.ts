@@ -1,5 +1,5 @@
 
-import { Component, ViewChild,AfterViewInit } from '@angular/core';
+import { Component, ViewChild,AfterViewInit,ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject, Subscription, Observable,of } from 'rxjs';
 import { UserdataService, userProfile,usrinfo, projectFlags, usrinfoDetails,projectControls } from './service/userdata.service';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -20,6 +20,7 @@ import { of as observableOf } from "rxjs";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { SelectionModel } from "@angular/cdk/collections";
+import { MatAccordion } from '@angular/material/expansion';
 
 
 @Injectable()
@@ -136,14 +137,18 @@ const TREE_DATA = JSON.stringify({
 
 @Component({
   selector: 'app-root',
+  changeDetection: ChangeDetectionStrategy.Default,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   providers: [FileDatabase]
 })
 export class AppComponent implements AfterViewInit{
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+
+  hideme=false;
   title = 'goldenNoStrict';
   myauth;
-  loggedinstate:Observable<string>=new BehaviorSubject('firstpage');
+  //loggedinstate:Observable<string>=new BehaviorSubject(undefined);
   subjectauth = new BehaviorSubject(undefined);
   getObservableauthStateSub: Subscription = new Subscription;
   getObservableauthState = (authdetails: Observable<firebase.User>) => {
@@ -168,7 +173,7 @@ export class AppComponent implements AfterViewInit{
     });
     return this.subjectonline;
   };
-  AfterOnlineCheckAuth = undefined;
+  AfterOnlineCheckAuth =  new BehaviorSubject(true);
 
   myuserProfile: userProfile = {
     userAuthenObj: null,//Receive User obj after login success
@@ -287,12 +292,12 @@ myusrinfoDetails:usrinfoDetails={
                               this.myprofileDetails=of(profileDetails);
                               console.log('profileDetails', this.myprofileDetails);
                           }                              
-                          //return of(onlineval);
                         }) ,withLatestFrom(addProfileDetailsSub),
                         map((values: any) => {
                           const [publickey, keys] = values;
-                          return onlineval;
-                        }));                     
+                          return of(onlineval);
+                        }));
+                                           
                     }
                     this.myprojectControls.addProfileDetails.reset();
                     this.myprojectControls.addProfileDetails.enable();
@@ -532,13 +537,18 @@ myusrinfoDetails:usrinfoDetails={
     });
   }
   startfirstpage(){
-    this.loggedinstate=of('firstpage');
+    //this.loggedinstate=of('firstpage');
   }
   componentLogOff() {
     this.myprojectFlags.newuserProfileDetails = false;
     this.myprofileDetails=of(undefined);
-    this.loggedinstate=of('startpage');
+    //this.loggedinstate=of('startpage');
     this.developmentservice.logout();
+  }
+  componentLogOn(){
+    //this.loggedinstate=of('startpage');
+    this.hideme=true;
+    this.developmentservice.login();
   }
   draweropen() {
   }
@@ -546,9 +556,7 @@ myusrinfoDetails:usrinfoDetails={
     this.sidenav.close();
   }
 
-
-
+ 
   ngAfterViewInit() {
-    this.tree.treeControl.expandAll();
   }
 }

@@ -2,8 +2,7 @@
 
         <cdk-virtual-scroll-viewport itemSize="100" class="scroll-viewport">
             <mat-accordion class="example-headers-align" multi>
-                <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-                    <mat-expansion-panel *ngFor="let public of publicList | async" cdkDrag>
+                    <mat-expansion-panel *ngFor="let public of publicProjectData  | async" >
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 {{public}}
@@ -23,10 +22,9 @@
                                 See Details
                             </button>
                         </div>
-                        <mat-divider style="colour:red"></mat-divider>
+                        <mat-divider style="color:red"></mat-divider>
 
                     </mat-expansion-panel>
-                </div>
             </mat-accordion>
 
         </cdk-virtual-scroll-viewport>
