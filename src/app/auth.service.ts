@@ -20,7 +20,7 @@ export class AuthService {
   init(): void {
     window.onload = () => {
       window.google.accounts.id.initialize({
-        client_id: 1075525420003-393vor4371dr05rlou9890vf8hv8m7p4.apps.googleusercontent.com,
+        client_id: "1075525420003-393vor4371dr05rlou9890vf8hv8m7p4.apps.googleusercontent.com",
         callback: (token) => {
           this.handle(token);
         }
