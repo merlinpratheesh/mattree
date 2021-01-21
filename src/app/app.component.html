@@ -228,9 +228,13 @@
                             </mat-card>
                         </mat-grid-tile>
                         <mat-grid-tile colspan="4" rowspan="2" [style.background]="'red'">
-                            
+                            <mat-toolbar class="header" color="warn">
+                                <div>Public Projects</div>
+                                <span fxFlex="grow"></span>
+                            </mat-toolbar>
                                 <mat-list role="list">
-                                    <mat-list-item role="listitem">Item 1
+                                    <mat-list-item role="listitem">
+                                        
                                         <app-publicprojects>
                                         </app-publicprojects>
                                     </mat-list-item>

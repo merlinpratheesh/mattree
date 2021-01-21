@@ -46,7 +46,6 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
         let publicprojectsList = [];
         if (val.data() !== undefined) {//always have one public project
           publicprojectsList = val.data().public;
-          publicprojectsList.push('Demo');
           //}          
         } 
           return this.myprojectControls.publicprojectControl.valueChanges.pipe(
