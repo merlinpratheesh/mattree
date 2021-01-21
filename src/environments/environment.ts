@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  firebase: {
+  firebaseconfig: {
     apiKey: "AIzaSyBg-hLuMoJ_QinJQ2MyUHWJ8-ih7nINCrY",
     authDomain: "verifytesttool.firebaseapp.com",
     databaseURL: "https://verifytesttool.firebaseio.com",
