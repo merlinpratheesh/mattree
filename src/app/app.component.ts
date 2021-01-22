@@ -1,8 +1,7 @@
 
-import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild,  ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subscription, Observable, of } from 'rxjs';
 import { UserdataService, userProfile, usrinfo, projectFlags, usrinfoDetails, projectControls } from './service/userdata.service';
-import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { docData } from 'rxfire/firestore';
@@ -11,16 +10,17 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { map, switchMap, startWith, withLatestFrom } from 'rxjs/operators';
 import { MatAccordion } from '@angular/material/expansion';
-
+import {AngularFireAuth} from '@angular/fire/auth';
+import {FirebaseuiAngularLibraryService, FirebaseUISignInFailure, FirebaseUISignInSuccessWithAuthResult} from 'firebaseui-angular';
 
 
 @Component({
-  selector: 'app-root',
+  selector: "[fbui-ng-root],['app-root']",
   changeDetection: ChangeDetectionStrategy.Default,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit   {
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   hideme = false;
@@ -111,7 +111,9 @@ export class AppComponent implements AfterViewInit {
     private db: AngularFirestore,
     public fb: FormBuilder,
     public dialog: MatDialog,
+    private firebaseuiAngularLibraryService: FirebaseuiAngularLibraryService
   ) {
+    firebaseuiAngularLibraryService.firebaseUiInstance.disableAutoSignIn();
 
     const addProfileDetailsSub = this.myprojectControls.addProfileDetails.valueChanges.pipe(
       startWith({
@@ -189,6 +191,21 @@ export class AppComponent implements AfterViewInit {
 
 
   }
+  ngOnInit(): void {
+    this.afAuth.authState.subscribe(d => console.log(d));
+  }
+  successCallback(data: FirebaseUISignInSuccessWithAuthResult) {
+    console.log('successCallback', data);
+  }
+  errorCallback(data: FirebaseUISignInFailure) {
+    console.warn('errorCallback', data);
+  }
+  uiShownCallback() {
+    console.log('UI shown');
+  }
+  logout() {
+    this.afAuth.signOut();
+  }
   CreateNewUser() {
     const nextMonth: Date = new Date();
     nextMonth.setMonth(nextMonth.getMonth() + 1);
@@ -237,6 +254,4 @@ export class AppComponent implements AfterViewInit {
   }
 
 
-  ngAfterViewInit() {
-  }
 }
