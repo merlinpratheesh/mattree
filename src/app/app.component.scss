@@ -1,12 +1,17 @@
 .example-card {
-   background-color:white;
+   background-color : #eeeeee;
    height: 100vh;  }
   
   .example-header-image {
     background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
     background-size: cover;
   }
-
+.listitem{
+  position: absolute;
+  top: 300px;
+  color:white;
+  justify-content: space-between;
+}
   .custom-icon {
     cursor: pointer;
   } 
@@ -43,6 +48,7 @@
     position: absolute;
     top: 0;
     left:0;
+    color:white;
     justify-content: space-between;
   }
  

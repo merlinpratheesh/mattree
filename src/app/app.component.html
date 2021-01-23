@@ -134,13 +134,13 @@
 
                 <mat-tab-group>
                     <mat-tab>
-                        <ng-template mat-tab-label class="header" color="white">Public</ng-template>
+                        <ng-template mat-tab-label class="header" color="warn" >Public</ng-template>
                         <ng-template matTabContent>
                             <app-publicprojects></app-publicprojects>
                         </ng-template>
                     </mat-tab>
                     <mat-tab>
-                        <ng-template mat-tab-label class="header" color="white">Private</ng-template>
+                        <ng-template mat-tab-label class="header" >Private</ng-template>
                         <ng-template matTabContent>
                             <app-privateprojects [profileinfoUid]="myuserProfile?.userAuthenObj">
                             </app-privateprojects>
@@ -184,7 +184,7 @@
                 </mat-toolbar>
                 <mat-grid-list cols="10" rowHeight="50vh">
 
-                    <mat-grid-tile colspan="2" rowspan="2" [style.background]="'white'">
+                    <mat-grid-tile colspan="2" rowspan="2" [style.background]="'#eeeeee'">
                         <mat-card class="example-card" fxFlex="20vw" fxFlex.lt-sm="40vw">
 
                             <div style="color:rgba(111, 0, 255, 0.459);  padding:0px; margin:0px" fxLayout="row"
@@ -196,7 +196,7 @@
                                     <div fxLayout="column" >
                                         <mat-chip-list>
                                             <mat-chip
-                                                style="font-size:1.5em; cursor:none; opacity:.6; background-color:yellow;color: red; padding:10px;height: 60px !important;">
+                                                style="font-size:1.5em; cursor:none; opacity:.6; background-color:#eeeeee;color: red; padding:10px;height: 60px !important;">
                                                 Start Tasking!!</mat-chip>
                                         </mat-chip-list>
                                         <firebase-ui class="login-with-google-btn"  class="firebaseui-idp-icon" (signInSuccessWithAuthResult)="successCallback($event)"
@@ -213,7 +213,7 @@
                             <div>Public Projects</div>
                             <span fxFlex="grow"></span>
                         </mat-toolbar>
-                        <mat-list role="list">
+                        <mat-list class="listitem" role="list">
                             <mat-list-item role="listitem">
 
                                 <app-publicprojects>
