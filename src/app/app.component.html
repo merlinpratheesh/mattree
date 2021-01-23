@@ -13,18 +13,13 @@
             </fa-icon>
         </button>
     </mat-toolbar>
-
     <div>
         <mat-grid-list cols="10" rowHeight="50vh">
-            <mat-grid-tile colspan="2" rowspan="2" [style.background]="'cyan'">
-
+            <mat-grid-tile colspan="2" rowspan="2" [style.background]="'#eeeeee'">
                 <div *ngIf="(myprofilevalbef | async) as myprofilevalbefReady; else myprofilevalbefNotReady">
-
                     <div class="modal">
                         <div class="modal-container">
-
                             <div class="user-profile">
-
                                 <div class="profile">
                                     <img [src]="myuserProfile?.userAuthenObj.photoURL" />
                                     <p class="name">{{myuserProfile?.userAuthenObj.displayName }}</p>
@@ -160,16 +155,8 @@
                     <span fxFlex="grow"></span>
                 </mat-toolbar>
             </mat-grid-tile>
-
-
         </mat-grid-list>
-
-
-
     </div>
-
-
-
 </div>
 <ng-template #onlineAndAuthNotReady>
 
@@ -193,30 +180,28 @@
                     <div fxHide.lt-sm>
                         Welcome
                     </div>
-                    <button type="button" class="login-with-google-btn" (click)="developmentservice.login()">
-                        Sign in with Google
-                    </button>
+                    
                 </mat-toolbar>
                 <mat-grid-list cols="10" rowHeight="50vh">
 
-                    <mat-grid-tile colspan="2" rowspan="2" [style.background]="'cyan'">
+                    <mat-grid-tile colspan="2" rowspan="2" [style.background]="'white'">
                         <mat-card class="example-card" fxFlex="20vw" fxFlex.lt-sm="40vw">
 
-                            <div style="color:yellow; padding:0px;" fxLayout="row" fxLayoutGap="20%"
-                                fxLayoutAlign="space-between center">
+                            <div style="color:rgba(111, 0, 255, 0.459);  padding:0px; margin:0px" fxLayout="row"
+                                >
                                 <div>
                                     <h1> Analayze all the Steps of a Task </h1>
                                     <h1> Record all the Steps for Easy Tracking </h1>
 
-                                    <div fxLayout="column" fxLayoutGap="10%">
+                                    <div fxLayout="column" >
                                         <mat-chip-list>
                                             <mat-chip
                                                 style="font-size:1.5em; cursor:none; opacity:.6; background-color:yellow;color: red; padding:10px;height: 60px !important;">
                                                 Start Tasking!!</mat-chip>
                                         </mat-chip-list>
-                                        <button type="button" class="login-with-google-btn" (click)="componentLogOn()">
-                                            Sign in with Google
-                                        </button>
+                                        <firebase-ui class="login-with-google-btn"  class="firebaseui-idp-icon" (signInSuccessWithAuthResult)="successCallback($event)"
+                                        (signInFailure)="errorCallback($event)" 
+                                        (uiShown)="uiShownCallback()"></firebase-ui>
                                     </div>
                                 </div>
                             </div>
@@ -243,17 +228,12 @@
                             <div>Keys</div>
                            
                         </mat-toolbar>
-                        <firebase-ui (signInSuccessWithAuthResult)="successCallback($event)"
-                        (signInFailure)="errorCallback($event)" 
-                        (uiShown)="uiShownCallback()"></firebase-ui>
+                      
                     </mat-grid-tile>
                 </mat-grid-list>
             </div>
         </ng-template>
-
-
     </div>
-
     <ng-template #myonlineNotReady>
         <div *ngIf="(myonline | async)==false">
             <div fxLayoutAlign="center center" style="height:100vh;">
