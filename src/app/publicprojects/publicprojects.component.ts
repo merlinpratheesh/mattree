@@ -39,6 +39,7 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
   ngOnInit(): void {
     this.myuserProfile.userAuthenObj=this.profileinfoUid;
   }
+  publicprojectsList:any;
   ngAfterViewInit()
   {
     this.publicProjectData = doc(this.db.firestore.doc('/projectList/publicProjects')).pipe(take(1),
@@ -61,7 +62,9 @@ export class PublicprojectsComponent implements OnInit,AfterViewInit,OnDestroy {
     );
 
   }
-
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.publicprojectsList, event.previousIndex, event.currentIndex);
+  }
   ngOnDestroy(){
   }
 

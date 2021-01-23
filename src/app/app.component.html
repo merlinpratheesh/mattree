@@ -15,7 +15,7 @@
     </mat-toolbar>
     <div>
         <mat-grid-list cols="10" rowHeight="50vh">
-            <mat-grid-tile colspan="2" rowspan="2" [style.background]="'#eeeeee'">
+            <mat-grid-tile colspan="2" rowspan="2" [style.background]="'#F2F3F5'">
                 <div *ngIf="(myprofilevalbef | async) as myprofilevalbefReady; else myprofilevalbefNotReady">
                     <div class="modal">
                         <div class="modal-container">
@@ -24,9 +24,10 @@
                                     <img [src]="myuserProfile?.userAuthenObj.photoURL" />
                                     <p class="name">{{myuserProfile?.userAuthenObj.displayName }}</p>
                                     <p class="bio-1">MemberType:{{myprofilevalbefReady.MembershipType}}</p>
-                                    <p class="bio-2">Current ProjectName: {{myprofilevalbefReady.projectName}}
+                                    <p class="bio-2">ProjectName: {{myprofilevalbefReady.projectName}}
                                     </p>
-                                    <p class="bio-2">MemberStill: {{myprofilevalbefReady.MembershipEnd}}</p>
+                                    <p class="bio-2">Date: {{myprofilevalbefReady.MembershipEnd}}</p>
+                                    <br>
                                     <div
                                         *ngIf="(myprofileDetails | async) as myprofileDetailsReady; else myprofileDetailsNotReady">
                                         <mat-label>
@@ -130,17 +131,17 @@
             </mat-grid-tile>
 
 
-            <mat-grid-tile colspan="4" rowspan="2" [style.background]="'red'">
+            <mat-grid-tile colspan="4" rowspan="2" [style.background]="'#F2F3F5'">
 
                 <mat-tab-group>
-                    <mat-tab>
-                        <ng-template mat-tab-label class="header" color="warn" >Public</ng-template>
+                    <mat-tab class="header" style="color:#216fdb">
+                        <ng-template mat-tab-label  >Public</ng-template>
                         <ng-template matTabContent>
                             <app-publicprojects></app-publicprojects>
                         </ng-template>
                     </mat-tab>
-                    <mat-tab>
-                        <ng-template mat-tab-label class="header" >Private</ng-template>
+                    <mat-tab class="header" style="color:#216fdb">
+                        <ng-template mat-tab-label  >Private</ng-template>
                         <ng-template matTabContent>
                             <app-privateprojects [profileinfoUid]="myuserProfile?.userAuthenObj">
                             </app-privateprojects>
@@ -149,11 +150,10 @@
                 </mat-tab-group>
             </mat-grid-tile>
 
-            <mat-grid-tile colspan="4" rowspan="2" [style.background]="'blue'">
-                <mat-toolbar class="header" color="warn">
-                    <div>Keys</div>
-                    <span fxFlex="grow"></span>
-                </mat-toolbar>
+            <mat-grid-tile colspan="4" rowspan="2" [style.background]="'#F2F3F5'">
+                <mat-toolbar class="header" color="#216fdb">
+                    <div>Keys</div> 
+                </mat-toolbar>    
             </mat-grid-tile>
         </mat-grid-list>
     </div>
@@ -184,10 +184,10 @@
                 </mat-toolbar>
                 <mat-grid-list cols="10" rowHeight="50vh">
 
-                    <mat-grid-tile colspan="2" rowspan="2" [style.background]="'#eeeeee'">
+                    <mat-grid-tile colspan="2" rowspan="2" [style.background]="'#F2F3F5'">
                         <mat-card class="example-card" fxFlex="20vw" fxFlex.lt-sm="40vw">
 
-                            <div style="color:rgba(111, 0, 255, 0.459);  padding:0px; margin:0px" fxLayout="row"
+                            <div style="color:#216fdb;  padding:0px; margin:0px" fxLayout="row"
                                 >
                                 <div>
                                     <h1> Analayze all the Steps of a Task </h1>
@@ -196,7 +196,7 @@
                                     <div fxLayout="column" >
                                         <mat-chip-list>
                                             <mat-chip
-                                                style="font-size:1.5em; cursor:none; opacity:.6; background-color:#eeeeee;color: red; padding:10px;height: 60px !important;">
+                                                style="font-size:1.5em; cursor:none; opacity:.6; background-color:#F2F3F5;color: red; padding:10px;height: 60px !important;">
                                                 Start Tasking!!</mat-chip>
                                         </mat-chip-list>
                                         <firebase-ui class="login-with-google-btn"  class="firebaseui-idp-icon" (signInSuccessWithAuthResult)="successCallback($event)"
@@ -208,8 +208,8 @@
 
                         </mat-card>
                     </mat-grid-tile>
-                    <mat-grid-tile colspan="4" rowspan="2" [style.background]="'red'">
-                        <mat-toolbar class="header" color="warn">
+                    <mat-grid-tile colspan="4" rowspan="2" [style.background]="'#F2F3F5'">
+                        <mat-toolbar class="header" color="#216fdb">
                             <div>Public Projects</div>
                             <span fxFlex="grow"></span>
                         </mat-toolbar>
@@ -223,8 +223,8 @@
 
 
                     </mat-grid-tile>
-                    <mat-grid-tile colspan="4" rowspan="2" [style.background]="'blue'">
-                        <mat-toolbar class="header" color="warn">
+                    <mat-grid-tile colspan="4" rowspan="2" [style.background]="'#F2F3F5'">
+                        <mat-toolbar class="header" color="#216fdb">
                             <div>Keys</div>
                            
                         </mat-toolbar>

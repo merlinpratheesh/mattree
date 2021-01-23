@@ -1,5 +1,5 @@
 .example-card {
-   background-color : #eeeeee;
+   background-color : #F2F3F5;
    height: 100vh;  }
   
   .example-header-image {
@@ -48,8 +48,8 @@
     position: absolute;
     top: 0;
     left:0;
-    color:white;
-    justify-content: space-between;
+    color:#216fdb;
+    justify-content: space-around;
   }
  
   .login-with-google-btn {
@@ -75,7 +75,7 @@
     }
     
     &:active {
-      background-color: #eeeeee;
+      background-color: #F2F3F5;
     }
     
     &:focus {
@@ -104,7 +104,7 @@
   /* Profile */
   
   .profile {
-    background: #eeeeee;
+    background: #F2F3F5;
     margin: 0;
     height: 100vh;
     padding: 50px 10px;
@@ -112,8 +112,8 @@
   
   img {
     display: block;
-    margin: auto;
-    height: 128px;
+    margin : auto;
+    height: 100px;
     width: auto;
     padding:15px;
     border-radius: 50%;
@@ -131,14 +131,19 @@
   /* Bio */
   
   .bio-1 {
-    font-size: 1em;
-    font-weight: 500;
-    color: #757575;
+    font-size: 1.6em;
+    line-height: 1;
+    font-weight: 400;
+    padding:5px;
+    color: #212121;
   }
   
   .bio-2 {
-    font-size: 0.8em;
-    color: #757575;
+    font-size: 1.6em;
+    line-height: 1;
+    font-weight: 400;
+    padding:5px;
+    color: #212121;
   }
   
   .bio-contact {
@@ -165,7 +170,7 @@
   }
   
   a {
-    color: #eeeeee;
+    color: #F2F3F5;
   }
   
   a:hover {
@@ -203,7 +208,7 @@
   .modal-container {
     top:0;
     left:0;
-    background-color: #eeeeee;
+    background-color: #F2F3F5;
 
     box-shadow: 0.5em 0.5em 1.2em rgba(0, 0, 0, 0.2);
   }
